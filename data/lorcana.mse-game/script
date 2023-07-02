@@ -385,3 +385,32 @@ ability_name_width := filter_text@(match: "[0-9]+", in_context: "<width=<match>"
 ability_name_top := filter_text@(match: "[0-9]+", in_context: "<top=<match>") + to_int
 
 ability_name_height := filter_text@(match: "[0-9]+", in_context: "<height=<match>") + to_int
+
+all_firsttypes := {
+	for each card in set do
+		card.type_1
+}
+
+all_actions := {
+	for each card in set do
+		if card.type_1 == "Action" then
+			card.type_2
+			#TODO: make this work for all types
+		else ""
+}
+
+all_items := {
+	for each card in set do
+		if card.type_1 == "Item" then
+			card.type_2
+			#TODO: make this work for all types
+		else ""
+}
+
+all_chartypes := {
+	for each card in set do
+		if (card.type_1 == "Floodborn" or char.type_1 = "Dreamborn" or char.type_1 = "Floodborn" ) then
+			card.type_2
+			#TODO: make this work for all types
+		else ""
+}
