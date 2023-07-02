@@ -1,0 +1,65 @@
+add cards script:
+	name: &Commons
+	description: Add a common card of each ink type to the set
+	script:
+		[
+			new_card([ink: "amber"]),
+			new_card([ink: "amethyst"]),
+			new_card([ink: "emerald"]),
+			new_card([ink: "ruby"]),
+			new_card([ink: "sapphire"]),
+			new_card([ink: "steel"])
+		]
+
+add cards script:
+	name: &Uncommons
+	description: Add an uncommon card of each ink type to the set
+	script:
+		[
+			new_card([rarity: "uncommon", ink: "amber"]),
+			new_card([rarity: "uncommon", ink: "amethyst"]),
+			new_card([rarity: "uncommon", ink: "emerald"]),
+			new_card([rarity: "uncommon", ink: "ruby"]),
+			new_card([rarity: "uncommon", ink: "sapphire"]),
+			new_card([rarity: "uncommon", ink: "steel"])
+		]
+
+add cards script:
+	name: &Rares
+	description: Add a rare card of each ink type to the set
+	script:
+		[
+			new_card([rarity: "rare", ink: "amber"]),
+			new_card([rarity: "rare", ink: "amethyst"]),
+			new_card([rarity: "rare", ink: "emerald"]),
+			new_card([rarity: "rare", ink: "ruby"]),
+			new_card([rarity: "rare", ink: "sapphire"]),
+			new_card([rarity: "rare", ink: "steel"])
+		]
+
+add cards script:
+	name: &Super Rares
+	description: Add a super rare card of each ink type to the set
+	script:
+		[
+			new_card([rarity: "super rare", ink: "amber"]),
+			new_card([rarity: "super rare", ink: "amethyst"]),
+			new_card([rarity: "super rare", ink: "emerald"]),
+			new_card([rarity: "super rare", ink: "ruby"]),
+			new_card([rarity: "super rare", ink: "sapphire"]),
+			new_card([rarity: "super rare", ink: "steel"])
+		]
+
+add cards script:
+	name: &Legendaries
+	description: Add a legendary card of each ink type to the set
+	script:
+		[
+			new_card([rarity: "legendary", ink: "amber"]),
+			new_card([rarity: "legendary", ink: "amethyst"]),
+			new_card([rarity: "legendary", ink: "emerald"]),
+			new_card([rarity: "legendary", ink: "ruby"]),
+			new_card([rarity: "legendary", ink: "sapphire"]),
+			new_card([rarity: "legendary", ink: "steel"])
+		]
+

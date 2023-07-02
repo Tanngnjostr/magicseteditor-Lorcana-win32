@@ -1,0 +1,76 @@
+﻿pack type:
+	name: random
+	selectable: false
+	select: no replace
+	filter: not is_token()
+pack type:
+	name: foil
+	selectable: false
+	select: no replace
+	filter: not is_token()
+pack type:
+	name: common
+	selectable: false
+	filter: card.rarity == "common"
+pack type:
+	name: uncommon
+	selectable: false
+	filter: card.rarity == "uncommon"
+pack type:
+	name: rare
+	selectable: false
+	filter: card.rarity == "rare"
+pack type:
+	name: super rare
+	selectable: false
+	filter: card.rarity == "super rare"
+pack type:
+	name: legendary
+	selectable: false
+	filter: card.rarity == "legendary"
+pack type:
+	name: token / rulestip
+	selectable: false
+	filter: is_token()
+
+
+
+pack type:
+	name: rare, super rare or legendary
+	selectable: false
+	select: replace
+	#weights are made up for now
+	item:
+		name: legendary
+		weight: 1
+	item:
+		name: super rare
+		weight: 3
+	item:
+		name: rare
+		weight: 6
+
+
+
+pack type:
+	name: booster pack
+	selectable: true
+	item:
+		name: foil
+		amount: 1
+	item:
+		name: rare, super rare or legendary
+		amount: 2
+	item:
+		name: uncommon
+		amount: 3
+	item:
+		name: common
+		amount: 6
+
+pack type:
+	name: opening hand
+	selectable: true
+	item:
+		name: random
+		amount: 7

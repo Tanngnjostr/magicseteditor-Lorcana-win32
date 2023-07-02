@@ -1,0 +1,560 @@
+﻿
+######################################## Gameplay
+
+card field:
+	type: text
+	name: name
+	card list visible: false
+	card list name: Name
+	card list column: 10
+	card list width: 100
+	show statistics: false
+	description: The name of the card.
+
+card field:
+	type: text
+	name: title
+	card list visible: false
+	card list name: Title
+	card list column: 20
+	card list width: 100
+	show statistics: false
+	description: The title of the card, under the name.
+
+card field:
+	type: text
+	name: full name
+	identifying: true
+	script: full_name_script()
+	card list visible: true
+	card list name: Full Name
+	card list column: 0
+	card list width: 150
+	show statistics: false
+	description: The combined name and title of a card.
+
+card field:
+	type: choice
+	name: ink
+	choice: amber
+	choice: amethyst
+	choice: emerald
+	choice: ruby
+	choice: sapphire
+	choice: steel
+	initial: amber
+	card list visible: true
+	card list name: Ink
+	card list column: 30
+	show statistics: false
+	description: The frame of the card, used to indicate ink type.
+
+card field:
+	type: color
+	name: border
+	default: set.border_color
+	choice:
+		name: black
+		color: rgb(0,0,0)
+	choice:
+		name: white
+		color: rgb(255,255,255)
+	choice:
+		name: silver
+		color: rgb(200,200,200)
+	choice:
+		name: gold
+		color: rgb(200,180,0)
+	show statistics: false
+	description: The border color of the card.
+
+card field:
+	type: text
+	name: cost
+	card list visible: true
+	card list column: 40
+	card list alignment: right
+	card list width: 50
+	card list name: Cost
+	show statistics: false
+	description: The ink cost of the card.
+
+card field:
+	type: choice
+	name: inkwell
+	choice: inkwell
+	choice: no inkwell
+	initial: inkwell
+	card list visible: true
+	card list name: Inkwell
+	card list column: 50
+	show statistics: false
+	description: The inkwell symbol, used to indicate if the card can be inked.
+
+card field:
+	type: text
+	name: type 1
+	card list visible: false
+	card list name: Type 1
+	card list column: 61
+	show statistics: false
+	description: The first classification of the card.
+card field:
+	type: text
+	name: type 2
+	card list visible: false
+	card list name: Type 2
+	card list column: 62
+	show statistics: false
+	description: The second classification of the card.
+card field:
+	type: text
+	name: type 3
+	card list visible: false
+	card list name: Type 3
+	card list column: 63
+	show statistics: false
+	description: The third classification of the card.
+card field:
+	type: text
+	name: type 4
+	card list visible: false
+	card list name: Type 4
+	card list column: 64
+	show statistics: false
+	description: The fourth classification of the card.
+card field:
+	type: text
+	name: type 5
+	card list visible: false
+	card list name: Type 5
+	card list column: 65
+	show statistics: false
+	description: The fifth classification of the card.
+card field:
+	type: text
+	name: type 6
+	card list visible: false
+	card list name: Type 6
+	card list column: 66
+	show statistics: false
+	description: The sixth classification of the card.
+card field:
+	type: text
+	name: type
+	script: type_script()
+	card list visible: true
+	card list name: Types
+	card list column: 60
+	show statistics: false
+	description: The classifications of the card.
+
+card field:
+	type: text
+	name: text
+	multi line: true
+	script: text_aggregate(input: value)
+	card list visible: false
+	card list name: Rule Text
+	card list column: 70
+	show statistics: false
+	description: The entire rules text and flavor text of the card.
+
+card field:
+	type: text
+	name: ability 1
+	multi line: true
+	script: text_filter(input: value, ability_number: 1)
+	card list visible: false
+	card list name: A1 Text
+	card list column: 71
+	show statistics: false
+	description: The rules text of the first ability or passive.
+
+card field:
+	type: text
+	name: ability 1 name
+	multi line: true
+	script: ability_name(input: value, ability_number: 1)
+	card list allow: false
+	show statistics: false
+	editable: false
+	description: The name of the first ability. Needs to be a separate field to know it's exact length. Will also store card_style info inside tags.
+
+card field:
+	type: text
+	name: ability 2
+	multi line: true
+	script: text_filter(input: value, ability_number: 2)
+	card list visible: false
+	card list name: A2 Text
+	card list column: 72
+	show statistics: false
+	description: The rules text of the second ability or passive.
+
+card field:
+	type: text
+	name: ability 2 name
+	multi line: true
+	script: ability_name(input: value, ability_number: 2)
+	card list allow: false
+	show statistics: false
+	editable: false
+	description: The name of the second ability. Needs to be a separate field to know it's exact length. Will also store card_style info inside tags.
+
+card field:
+	type: text
+	name: ability 3
+	multi line: true
+	script: text_filter(input: value, ability_number: 3)
+	card list visible: false
+	card list name: A3 Text
+	card list column: 73
+	show statistics: false
+	description: The rules text of the third ability or passive.
+
+card field:
+	type: text
+	name: ability 3 name
+	multi line: true
+	script: ability_name(input: value, ability_number: 3)
+	card list allow: false
+	show statistics: false
+	editable: false
+	description: The name of the third ability. Needs to be a separate field to know it's exact length. Will also store card_style info inside tags.
+
+card field:
+	type: text
+	name: ability 4
+	multi line: true
+	script: text_filter(input: value, ability_number: 4)
+	card list visible: false
+	card list name: A4 Text
+	card list column: 74
+	show statistics: false
+	description: The rules text of the fourth ability or passive.
+
+card field:
+	type: text
+	name: ability 4 name
+	multi line: true
+	script: ability_name(input: value, ability_number: 4)
+	card list allow: false
+	show statistics: false
+	editable: false
+	description: The name of the fourth ability. Needs to be a separate field to know it's exact length. Will also store card_style info inside tags.
+
+card field:
+	type: text
+	name: ability 5
+	multi line: true
+	script: text_filter(input: value, ability_number: 5)
+	card list visible: false
+	card list name: A5 Text
+	card list column: 75
+	show statistics: false
+	description: The rules text of the fifth ability or passive.
+
+card field:
+	type: text
+	name: ability 5 name
+	multi line: true
+	script: ability_name(input: value, ability_number: 5)
+	card list allow: false
+	show statistics: false
+	editable: false
+	description: The name of the fifth ability. Needs to be a separate field to know it's exact length. Will also store card_style info inside tags.
+
+card field:
+	type: text
+	name: ability 6
+	multi line: true
+	script: text_filter(input: value, ability_number: 6)
+	card list visible: false
+	card list name: A6 Text
+	card list column: 76
+	show statistics: false
+	description: The rules text of the sixth ability or passive.
+
+card field:
+	type: text
+	name: ability 6 name
+	multi line: true
+	script: ability_name(input: value, ability_number: 6)
+	card list allow: false
+	show statistics: false
+	editable: false
+	description: The name of the sixth ability. Needs to be a separate field to know it's exact length. Will also store card_style info inside tags.
+
+card field:
+	type: text
+	name: compulse save
+	script: compulse_save_script()
+	card list allow: false
+	show statistics: false
+	save value: false
+	description: All fields combined by this will get saved as soon as one of them is modified, even if they are in their default state. This field must be present on the template, but out of the bounds of the card, to the right. It must have a height greater than 2.
+
+card field:
+	type: text
+	name: strength
+	card list visible: false
+	card list name: Strength
+	card list column: 81
+	show statistics: false
+	description: The strength of a character.
+
+card field:
+	type: text
+	name: will
+	card list visible: false
+	card list name: Will
+	card list column: 82
+	show statistics: false
+	description: The will of a character.
+
+card field:
+	type: text
+	name: sw
+	script: sw_script()
+	card list visible: true
+	card list column: 80
+	card list width: 50
+	card list name: S/W
+	show statistics: false
+	description: The strength/will of a character.
+
+card field:
+	type: choice
+	name: lore
+	choice: no box
+	choice: 0
+	choice: 1
+	choice: 2
+	choice: 3
+	choice: 4
+	choice: 5
+	choice: 6
+	initial: no box
+	card list visible: true
+	card list name: Lore
+	card list column: 90
+	show statistics: false
+	description: The lore value of a character.
+
+######################################## Flavor
+
+card field:
+	type: text
+	name: flavor text
+	multi line: true
+	script: flavor_text_filter(value)
+	card list visible: false
+	card list name: Lore
+	card list column: 100
+	show statistics: false
+	description: The flavor text of the card.
+
+card field:
+	type: image
+	name: illustration
+	card list allow: false
+	show statistics: false
+	description: The illustration of the card.
+
+card field:
+	type: image
+	name: popout illustration
+	card list allow: false
+	show statistics: false
+	description: An extra illustration, used to make popout effects.
+
+card field:
+	type: choice
+	name: foil
+	choice: no foil
+	choice: foil
+	initial: no foil
+	card list visible: true
+	card list name: Lore
+	card list column: 180
+	show statistics: false
+	description: The foiling of the card.
+
+######################################## Copyright
+
+card field:
+	type: choice
+	name: rarity
+	choice: common
+	choice: uncommon
+	choice: rare
+	choice: super rare
+	choice: legendary
+	initial: common
+	sort script: rarity_sort()
+	card list visible: true
+	card list name: Rarity
+	card list column: 110
+	show statistics: false
+	description: The rarity of the card.
+
+card field:
+	type: text
+	name: illustrator
+	card list visible: true
+	card list name: Illustrator
+	card list column: 120
+	show statistics: false
+	description: The illustrator of the card.
+
+card field:
+	type: text
+	name: set code
+	script: set_code_script()
+	card list visible: false
+	card list name: Set Code
+	card list column: 130
+	show statistics: false
+	description: The code of the set, typically three uppercase letters.
+
+card field:
+	type: text
+	name: set language
+	script: set_language_script()
+	card list visible: false
+	card list name: Set Lang
+	card list column: 140
+	show statistics: false
+	description: The language of the set, typically two uppercase letters.
+
+card field:
+	type: text
+	name: card number
+	script: card_number_script()
+	card list visible: true
+	card list name: #
+	card list column: 150
+	card list width: 50
+	card list alignment: right
+	show statistics: false
+	description: The number of the card within the set. By default, cards are sorted by rarity, then by ink type, then by name.
+
+card field:
+	type: text
+	name: identification
+	script: card.card_number; card.set_code; card.set_language; card.custom_identification; identification_script()
+	card list visible: false
+	card list name: ID
+	card list column: 160
+	editable: false
+	show statistics: false
+	description: The card number, set language, and set code, aggregted together.
+card field:
+	type: text
+	name: custom identification
+	card list visible: false
+	card list name: Custom ID
+	card list column: 161
+	show statistics: false
+	description: A custom text field to add info to the identification line.
+
+card field:
+	type: text
+	name: copyright
+	script: card.custom_copyright; copyright_script()
+	card list visible: false
+	card list name: Copyright
+	card list column: 170
+	editable: false
+	show statistics: false
+	description: The copyright text.
+card field:
+	type: text
+	name: custom copyright
+	card list visible: false
+	card list name: Custom Copyright
+	card list column: 171
+	show statistics: false
+	description: A custom text field to add info to the copyright line.
+
+######################################## Sorting
+
+card field:
+	type: text
+	name: sorted notes
+	multi line: true
+	script: card.notes
+	card list visible: false
+	card list name: Notes
+	card list column: 200
+	show statistics: false
+	description: A mirror of card notes to make it sortable.
+
+card field:
+	type: text
+	name: time modified
+	script: card.time_modified
+	card list visible: false
+	card list name: Time Modified
+	card list column: 210
+	show statistics: false
+	description: A mirror of time modified to make it sortable.
+
+card field:
+	type: text
+	name: time created
+	script: card.time_created
+	card list visible: false
+	card list name: Time Created
+	card list column: 211
+	show statistics: false
+	description: A mirror of time created to make it sortable.
+
+card field:
+	type: text
+	name: custom sort
+	#script: custom_sort()
+	card list visible: true
+	card list name: Custom Sort
+	card list column: 220
+	show statistics: false
+	description: A utility field to sort by more than one column. (Currently not implemented.)
+
+######################################## Custom
+
+card field:
+	type: text
+	name: custom text 1
+	multi line: true
+	default: custom_text_1_default()
+	script: custom_text_1_script()
+	card list visible: false
+	card list name: Custom Text 1
+	card list column: 301
+	show statistics: false
+	description: A custom text field available for template makers.
+
+card field:
+	type: text
+	name: custom text 2
+	multi line: true
+	default: custom_text_2_default()
+	script: custom_text_2_script()
+	card list visible: false
+	card list name: Custom Text 2
+	card list column: 302
+	show statistics: false
+	description: A custom text field available for template makers.
+
+card field:
+	type: text
+	name: custom text 3
+	multi line: true
+	default: custom_text_3_default()
+	script: custom_text_3_script()
+	card list visible: false
+	card list name: Custom Text 3
+	card list column: 303
+	show statistics: false
+	description: A custom text field available for template makers.

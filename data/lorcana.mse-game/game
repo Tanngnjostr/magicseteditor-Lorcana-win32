@@ -1,0 +1,33 @@
+﻿mse version: 2.1.2
+short name: Lorcana
+icon: card-back.png
+position hint: 03
+
+version: 2023-06-28
+
+
+
+init script:
+	include file: script
+	include file: statistics_script
+
+include file: card_fields
+include file: set_fields
+include file: statistics
+include file: add_cards_scripts
+include file: packs
+include file: keywords
+include file: keywords_custom
+include file: word_lists
+include file: auto_replace
+
+
+
+card list color script:
+	input := card.ink
+	if      input == "amber"	then	rgb(190,130,16)
+	else if input == "amethyst"	then	rgb(118,62,135)
+	else if input == "emerald"	then	rgb(48,119,57)
+	else if input == "ruby"		then	rgb(206,31,56)
+	else if input == "sapphire"	then	rgb(16,95,140)
+	else								rgb(101,107,122)

@@ -1,0 +1,375 @@
+﻿
+split_commas := split_text@(match:" *, *")
+
+round :=
+{
+	if		input == 0
+		or	input == "0"
+		or	input == "0.0"
+		or	input == "" then 0
+	else if	input > 0 then
+	(
+		int := to_int(input)
+		dec := input-int
+		if dec >= 0.5 then int+1 else int
+	)
+	else
+	(
+		int := to_int(input)
+		dec := input-int
+		if dec <= -0.5 then int-1 else int
+	)
+}
+
+full_name_script :=
+{
+	combined_editor(
+		field1: card.name,
+		separator: " - ",
+		field2: card.title,
+		soft_before_empty: true,
+		hide_when_empty: true
+	)
+}
+
+type_script :=
+{
+	combined_editor(
+		field1: card.type_1,
+		separator1: " • ",
+		field2: card.type_2,
+		separator2: " • ",
+		field3: card.type_3,
+		separator3: " • ",
+		field4: card.type_4,
+		separator4: " • ",
+		field5: card.type_5,
+		separator5: " • ",
+		field6: card.type_6,
+		soft_before_empty: true,
+		hide_when_empty: true
+	)
+}
+
+compulse_save_script :=
+{
+	combined_editor(
+		field1: card.text,
+		separator1: ";;",
+		field2: card.ability_1_name
+		separator2: ";;",
+		field3: card.ability_2_name
+		separator3: ";;",
+		field4: card.ability_3_name
+		separator4: ";;",
+		field5: card.ability_4_name
+		separator5: ";;",
+		field6: card.ability_5_name
+		separator6: ";;",
+		field7: card.ability_6_name
+	)
+}
+
+sw_script :=
+{
+	combined_editor(
+		field1: card.strength,
+		separator: "/",
+		field2: card.will,
+		soft_before_empty: true,
+		hide_when_empty: true
+	)
+}
+
+set_code_script :=
+{
+	if set.automatic_set_code then set.set_code else ""
+}
+
+set_language_script :=
+{
+	if set.automatic_set_language then set.set_language else ""
+}
+
+card_number_script :=
+{
+	if set.automatic_card_numbers then card_number() + "/" + card_count() else ""
+}
+
+card_number :=
+{
+	position (
+		of: card
+		in: set
+		order_by: { rarity_sort() + ink_sort() + name_sort(card.full_name) }
+		filter: { not is_token() }
+	) + 1
+}
+
+card_count :=
+{
+	number_of_items(in: set, filter: { not is_token() })
+}
+
+rarity_sort :=
+{
+	if card.rarity == "common"			then	"1"
+	else if card.rarity == "uncommon"	then	"2"
+	else if card.rarity == "rare"		then	"3"
+	else if card.rarity == "super rare"	then	"4"
+	else										"5"
+}
+
+ink_sort :=
+{
+	substring(card.ink, end: 2)
+}
+
+name_sort :=
+	# Remove "The", "A", and "An" at the beginning
+	replace@(match: "^(The|An?) ", replace: "") +
+	# Remove commas and apostrophes
+	replace@(match: "(,|'|’)", replace: "") +
+	# Remove bold and italic tags
+	replace@(match: "(<b>|<i>|</b>|</i>)", replace: "") +
+	# Make lowercase
+	to_lower
+
+identification_script :=
+{
+	num := card_number_script()
+	lan := set_language_script()
+	set := set_code_script()
+	numlan := num + (if num != "" and lan != "" then " • " else "") + lan
+	numlanset := numlan + (if numlan != "" and set != "" then " • " else "") + set
+	(if numlanset != "" and card.custom_identification != "" then " • " else "") + numlanset
+}
+
+copyright_script :=
+{
+	cop := if set.automatic_copyright then set.copyright else ""
+	cop + (if card.custom_copyright != "" and cop != "" then " • " else "")
+}
+
+custom_text_1_default := { "" }
+custom_text_1_script := { value }
+custom_text_2_default := { "" }
+custom_text_2_script := { value }
+custom_text_3_default := { "" }
+custom_text_3_script := { value }
+
+card_codes_filter := replace@(match:"^[CURMSL][WUBRGMZACL][0-9]+ ?[-—]? ?", replace:"")
+
+strip_card_codes :=
+{
+	save := input
+	input := card_codes_filter(input)
+	if input == "" or input == " " then save else input
+}
+
+is_token :=
+{
+	false
+}
+
+digital_number :=
+{
+	input := replace(input, match:"up to ", replace:"")
+	if input == "zero" then 0
+	else if input == "one" or input == "a" or input == "an" then 1
+	else if input == "two" then 2
+	else if input == "three" then 3
+	else if input == "four" then 4
+	else if input == "five" then 5
+	else if input == "six" then 6
+	else if input == "seven" then 7
+	else if input == "eight" then 8
+	else if input == "nine" then 9
+	else if input == "ten" then 10
+	else if input == "eleven" then 11
+	else if input == "twelve" then 12
+	else if input == "thirteen" then 13
+	else if input == "fourteen" then 14
+	else if input == "fifteen" then 15
+	else if input == "sixteen" then 16
+	else if input == "seventeen" then 17
+	else if input == "eighteen" then 18
+	else if input == "nineteen" then 19
+	else if input == "twenty" then 20
+	else input
+}
+
+this_or_that :=
+{
+	result := "this"
+	if		input == "character"					then (if card.sw == ""	then result := "that")
+	else if	not contains(card.type, match: input)	then result := "that"
+	if upper then result := "T" + substring(result, begin: 1)
+	result
+}@(upper: false)
+
+symbol_context :=
+	"(?ix)							# case insensitive, ignore whitespace
+	(^|[[:space:]\"(“']|[0-9])		# start of the string, space, quote, parentheses or number
+	<match>							# the actual symbol
+	([ ,.)\"”—-]|$)					# space, comma, dot, quote, dash or end of string
+	";
+
+replace_symbols := replace@(match: "([SWELN])", in_context: symbol_context, replace: {"<sym-auto>" + _1 + "</sym-auto>"})
+
+text_filter :=
+	### step 1 : remove all automatic tags
+	remove_tag@(tag: "<sym-auto>") +
+	remove_tag@(tag: "<i-auto>")   +
+	remove_tag@(tag: "<b-auto>")   +
+	remove_tag@(tag: "<error-spelling") +
+	remove_tag@(tag: "<nospellcheck") +
+	remove_tag@(tag: "<color") +
+	#remove_tag@(tag: "<li>") +
+	#remove_tag@(tag: "<bullet>") +
+	#remove_tag@(tag: "<align") +
+	#remove_tag@(tag: "<margin") +
+	### step 2 : reminder text for keywords
+	### step 2a : expand reminder texts
+	expand_keywords@(
+		default_expand:
+		{
+			chosen(set.automatic_reminder_text, choice: mode)
+		},
+		combine:
+		{
+			keyword := "<b-auto><nospellcheck>{keyword}</nospellcheck></b-auto>"
+			reminder := process_english_hints(reminder)
+			keyword + if expand then "<atom-reminder-{mode}> ({reminder})</atom-reminder-{mode}>" else ""
+		}
+	) +
+	### step 2b : move reminder texts to the end of the line
+	replace@(
+		match: "(<atom-reminder-[^>]+> (?:(?!</kw).*?)</atom-reminder-[^>]+></kw[^>]*>)([^\n]*)",
+		replace: "\\2\\1"
+	) +
+	### step 2c : remove duplicate reminder text
+	replace@(
+		match: "(<atom-reminder-[^>]*>[^)]+[)]</atom-reminder-[^>]*>)([^\n]+)\\1"
+		replace: "\\2\\1"
+	) +
+	### step 2d : combine reminder texts
+	replace@(
+		match: "[)](</i-auto>)?(</atom-reminder-[^>]+></kw-[^>]>) ?(<atom-reminder-[^>]+> )(<i-auto>)?[(]"
+		replace: "\\2\\3"
+	) +
+	### step 3 : expand shortcut word CARDNAME
+	replace@(
+		match: "CARDNAME>?",
+		in_context: "(^|[[:space:]]|\\(|,|\\.|:|“|\"|'|‘|-|—|/|​)<match>", # TODO: Allow any punctuation before
+		replace: { "<nospellcheck>" + (if card.name=="" then "CARDNAME" else strip_card_codes(card.name)) + "</nospellcheck>" }
+	) +
+	### step 4 : add symbols
+	replace_symbols +
+	### step 5 : italicize text in parenthesis
+	replace@(
+	 	match: "[(]([^)\n]|[(][^)\n]*[)])*[)]?",
+		in_context: "(^|[[:space:]])<match>|<atom-keyword><match></",
+	 	replace: "<i-auto>&</i-auto>"
+	) +
+	### step 6 : bolden all caps text at start of string, make it white
+	replace@(
+	 	match: "(^[\"“‘']?[A-Z0-9][A-Z0-9 \"“‘'()-]+)([ ]+)",
+		replace: {"<color:rgb(255,255,255)><b-auto>" + _1 + "</b-auto></color:rgb(255,255,255)>" + _2}
+	) +
+	### step 7 : automatic capitalization, but not after "("
+	replace@(
+		match: "([ ]*: |—| — )" # preceded by this
+		     + "([[:lower:]])" # match this
+		     + "(?![)])",      # not followed by this
+		replace: { _1 + to_upper(_2) }
+	) +
+	### step 8 : spellcheck
+	{
+		if set.mark_errors then
+		check_spelling(
+			language: "en_US",
+			extra_dictionary: "/lorcana.mse-game/lorcana-words",
+		)
+		else input
+	}
+
+flavor_text_filter :=
+	### step 1 : remove italic tags
+	remove_tag@(tag: "<i-flavor>") +
+	### step 2 : spellcheck
+	{
+		if set.mark_errors then
+		check_spelling(
+			language: "en_US",
+			extra_dictionary: "/lorcana.mse-game/lorcana-words",
+		)
+		else input
+	} +
+	### step 3 : surround by italic tags
+	{ "<i-flavor>" + input + "</i-flavor>" }
+	
+text_aggregate :=
+{
+	combined_editor(
+		field1: card.ability_1,
+		separator1: "<line>\n</line>",
+		field2: card.ability_2,
+		separator2: "<line>\n</line>",
+		field3: card.ability_3,
+		separator3: "<line>\n</line>",
+		field4: card.ability_4,
+		separator4: "<line>\n</line>",
+		field5: card.ability_5,
+		separator5: "<line>\n</line>",
+		field6: card.ability_6,
+		separator6: "<line>\n</line>",
+		field7: card.flavor_text
+	)
+}
+
+last_active_ability :=
+{
+	if		card.ability_1 == ""	then	1
+	else if	card.ability_2 == ""	then	1
+	else if	card.ability_3 == ""	then	2
+	else if	card.ability_4 == ""	then	3
+	else if	card.ability_5 == ""	then	4
+	else if	card.ability_6 == ""	then	5
+	else									6
+}
+
+ability_name :=
+{
+	if card_style.compulse_save.height < 0.1 then value else (		# check if card_style was initialised, if not then just keep the saved value
+	text := block_break(card.text)[ability_number-1]
+	name := trim(filter_ability_name(replace_symbols(remove_tags(text))))
+	if name == "" then ""
+	else "<b-auto>" + name + "</b-auto>" + add_breaks(text, ability_number: ability_number) + add_info(ability_number: ability_number))
+}
+
+filter_ability_name := filter_text@(match: "(^[\"“‘']?[A-Z0-9][A-Z0-9 \"“‘'()-]+[ ])")
+
+block_break := split_text@(match: "<sep><line>\n</line></sep>")
+
+add_breaks :=
+{
+	if input == "" then "" else (
+	hard_break_count := length(card_style.text.layout.blocks[ability_number-1].paragraphs) - 1
+	soft_break_count := length(card_style.text.layout.blocks[ability_number-1].lines) - hard_break_count - 1
+	(for x from 1 to soft_break_count do "<soft-line>\n</soft-line>") + (for x from 1 to hard_break_count do "<hard-line>\n<hard-line>"))
+}
+
+add_info :=
+{
+	top := round(card_style.text.layout.blocks[ability_number-1].lines.0.top)
+	height := round(card_style.text.layout.blocks[ability_number-1].lines.0.height)
+	width := round(card_style["ability_" + ability_number + "_name"].content_width)
+	"<top=" + top + "></top=" + top + "><height=" + height + "></height=" + height + "><width=" + width + "></width=" + width + ">"
+}
+
+ability_name_width := filter_text@(match: "[0-9]+", in_context: "<width=<match>") + to_int
+
+ability_name_top := filter_text@(match: "[0-9]+", in_context: "<top=<match>") + to_int
+
+ability_name_height := filter_text@(match: "[0-9]+", in_context: "<height=<match>") + to_int

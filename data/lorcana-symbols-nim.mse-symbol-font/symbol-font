@@ -1,0 +1,45 @@
+﻿mse version: 2.1.2
+short name: Lorcana Symbols
+icon: exert.png
+position hint: 001
+
+version: 2023-06-28
+
+image font size: 60
+horizontal space: 2
+
+
+
+symbol:
+	code: E
+	image: exert.png
+	image font size: 40
+
+symbol:
+	code: N
+	image: ink.png
+	image font size: 40
+
+symbol:
+	code: S
+	image: strength.png
+	image font size: 54
+
+symbol:
+	code: W
+	image: willpower.png
+	image font size: 55
+
+symbol:
+	code: L
+	image: lore.png
+	image font size: 42
+
+
+
+insert symbol menu:
+	item: E
+	item: N
+	item: S
+	item: W
+	item: L

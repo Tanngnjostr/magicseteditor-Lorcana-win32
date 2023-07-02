@@ -1,0 +1,758 @@
+﻿##MVP REACHED! (MIKU VIABLE PRODUCT)
+
+#TODO: Add special bar/box fx for Floodborn cards
+#TODO: Add rarity symbols
+#TODO: Fix casting cost and S/W margins so some numbers don't look off-center
+#TODO: Add in flavor bars
+#TODO: Tweak numbers until appearance matches actual cards
+
+#TODO?: Add option to switch to assets used by canon cards, maybe
+
+mse version:	2.1.2
+game:			lorcana
+short name:		Lorcana
+full name:		Lorcana Cards
+icon:			sample.png
+position hint:	001
+
+version:		2023-06-28
+depends on:
+	package:		lorcana.mse-game
+	version:		2023-06-28
+depends on:
+	package:		lorcana-symbols-nim.mse-symbol-font
+	version:		2023-06-28
+
+card width:		375
+card height:	523
+card dpi:		150
+
+## By nim and GenevensiS
+
+
+
+####################### Card Script Definitions
+
+init script:
+	flavor_bar_top :=
+	{
+		352 +
+		((card_style.text.layout.blocks[last_active_ability()-1].bottom or else 0) + (card_style.text.layout.blocks[6].top or else 0))/2 -
+		ability_name_height(card.ability_1_name) * 7 / 52
+	}
+
+	background_top_correction :=
+	{
+		height := ability_name_height(card.ability_1_name)
+		if height > 21 then 1
+		else 0
+	}
+
+	popout_illustration_left := { to_int(split_commas(styling.popout_illustration_coordinates).0 or else 0) }
+	popout_illustration_top := { to_int(split_commas(styling.popout_illustration_coordinates).1 or else 0) }
+	popout_illustration_width := { to_int(split_commas(styling.popout_illustration_coordinates).2 or else 0) }
+	popout_illustration_height := { to_int(split_commas(styling.popout_illustration_coordinates).3 or else 0) }
+
+
+
+####################### Styling Field Definitions
+
+styling field:
+	type: text
+	name: popout illustration coordinates
+	description: The coordinates in pixels for the popout illustration, formatted as "left,top,width,height". Used to make some parts of the illustration jump out in front of the frame.
+
+
+
+####################### Card Field Looks
+
+card style:
+##	border:
+##		left:			0
+##		top:			0
+##		width:			375
+##		height:			523
+##		z index:		1
+
+card style:
+	ink:
+		left:			0
+		top:			0
+		width:			375
+		height:			523
+		z index: 		2
+		popup style:	in place
+		render style:	image
+		image:			{ "card/" + card.ink + "_card.png" }
+		choice images:
+			amber:		card/amber_card.png
+			amethyst:	card/amethyst_card.png
+			emerald:	card/emerald_card.png
+			ruby:		card/ruby_card.png
+			sapphire:	card/sapphire_card.png
+			steel:		card/steel_card.png
+
+card style:
+	cost:
+		left: 26
+		top: 28
+		width: 26
+		height: 30
+		alignment: center middle
+		font:
+			name: Illuminumbers
+			size: 18
+			color: white
+		z index: 40
+
+card style:
+	inkwell:
+		left:			5
+		top:			9
+		width:			68
+		height:			68
+		z index:		39
+		visible:		true
+		render style:	image
+		choice images:
+			no inkwell: 	normal.png
+			inkwell:		inkwell.png
+
+card style:
+	type:
+		left: 23
+		top: 330
+		width: 329
+		height: 19
+		alignment: center shrink-overflow
+		z index: 2
+		padding top: -3
+		font:
+			name: Brandon Grotesque Cond Black
+			size: 12
+			color: rgba(187,187,187,230)
+			style: italic
+			separator color: red
+
+card style:
+	name:
+		left:			23
+		top:			280
+		right:			352
+		height:			25
+		z index:		21
+		alignment:
+			script:
+				if card.sw == "" then
+				"center bottom shrink-overflow"
+				else
+				"left middle shrink-overflow"
+		##alignment: center bottom
+		padding bottom:
+			script:
+				if contains(card.type, match:"Action") or contains(card.type, match:"Item") then 
+				-12
+				else 
+				0
+		font:
+			name:			The Bystander Collection Sans Medium
+			size:			21
+			color:			white
+
+card style:
+	title:
+		left:			23
+		top:			306
+		right:			352
+		height:			20
+		z index:		21
+		padding top: -2
+		font:
+			name:			Brandon Grotesque Cond Bold
+			size:			12
+			color:			white
+
+card style:
+	illustration:
+		left:			18
+		top:			18
+		right:			357
+		bottom:			271
+		z index:		11
+
+card style:
+	popout illustration:
+		left:			{ popout_illustration_left() }
+		top:			{ popout_illustration_top() }
+		width:			{ popout_illustration_width() }
+		height:			{ popout_illustration_height() }
+		z index: 1000
+
+card style:
+	text:
+		left:			18
+		top:			350
+		width:			{ if card.lore == "no box" then 338 else 307 }
+		bottom:			480
+		z index:		21
+		alignment:		left middle
+		font:
+			name:			BrandonGrotesqueCond-Medium
+			italic name:	BrandonGrotesqueCond-MediumIt
+			size:			14
+			scale down to:	8
+			color:			black
+		symbol font:
+			name:			lorcana-symbols-nim
+			size:			14
+			scale down to:	8
+		padding left:			6
+		padding right:			5
+		line height hard:		1.0
+		line height line:		1.1
+		line height soft:		0.75
+		line height hard max:	1.3
+		line height line max:	1.6
+
+card style:
+	compulse save:
+		left:			400
+		top:			0
+		width:			100
+		bottom:			100
+
+card style:
+	ability 1 name:
+		left:			418
+		top:			{ 350 + card_style.text.layout.blocks.0.top }
+		width:			{ if card.lore == "no box" then 338 else 307 }
+		bottom:			{ 350 + card_style.text.layout.blocks.0.bottom }
+		z index:		23
+		alignment:		left middle
+		font:
+			name:			BrandonGrotesqueCond-Medium
+			italic name:	BrandonGrotesqueCond-MediumIt
+			size:			14
+			scale down to:	8
+			color:			white
+		symbol font:
+			name:			lorcana-symbols-nim
+			size:			14
+			scale down to:	8
+		padding left:			6
+		padding right:			5
+		line height hard:		1.0
+		line height line:		1.1
+		line height soft:		0.75
+		line height hard max:	1.3
+		line height line max:	1.6
+
+card style:
+	ability 2 name:
+		left:			418
+		top:			{ 350 + (card_style.text.layout.blocks.1.top or else 0) }
+		width:			{ if card.lore == "no box" then 338 else 307 }
+		bottom:			{ 350 + (card_style.text.layout.blocks.1.bottom or else 0) }
+		z index:		23
+		alignment:		left middle
+		font:
+			name:			BrandonGrotesqueCond-Medium
+			italic name:	BrandonGrotesqueCond-MediumIt
+			size:			14
+			scale down to:	8
+			color:			white
+		symbol font:
+			name:			lorcana-symbols-nim
+			size:			14
+			scale down to:	8
+		padding left:			6
+		padding right:			5
+		line height hard:		1.0
+		line height line:		1.1
+		line height soft:		0.75
+		line height hard max:	1.3
+		line height line max:	1.6
+
+card style:
+	ability 3 name:
+		left:			418
+		top:			{ 350 + (card_style.text.layout.blocks.2.top or else 0) }
+		width:			{ if card.lore == "no box" then 338 else 307 }
+		bottom:			{ 350 + (card_style.text.layout.blocks.2.bottom or else 0) }
+		z index:		23
+		alignment:		left middle
+		font:
+			name:			BrandonGrotesqueCond-Medium
+			italic name:	BrandonGrotesqueCond-MediumIt
+			size:			14
+			scale down to:	8
+			color:			white
+		symbol font:
+			name:			lorcana-symbols-nim
+			size:			14
+			scale down to:	8
+		padding left:			6
+		padding right:			5
+		line height hard:		1.0
+		line height line:		1.1
+		line height soft:		0.75
+		line height hard max:	1.3
+		line height line max:	1.6
+
+card style:
+	ability 4 name:
+		left:			418
+		top:			{ 350 + (card_style.text.layout.blocks.3.top or else 0) }
+		width:			{ if card.lore == "no box" then 338 else 307 }
+		bottom:			{ 350 + (card_style.text.layout.blocks.3.bottom or else 0) }
+		z index:		23
+		alignment:		left middle
+		font:
+			name:			BrandonGrotesqueCond-Medium
+			italic name:	BrandonGrotesqueCond-MediumIt
+			size:			14
+			scale down to:	8
+			color:			white
+		symbol font:
+			name:			lorcana-symbols-nim
+			size:			14
+			scale down to:	8
+		padding left:			6
+		padding right:			5
+		line height hard:		1.0
+		line height line:		1.1
+		line height soft:		0.75
+		line height hard max:	1.3
+		line height line max:	1.6
+
+card style:
+	ability 5 name:
+		left:			418
+		top:			{ 350 + (card_style.text.layout.blocks.4.top or else 0) }
+		width:			{ if card.lore == "no box" then 338 else 307 }
+		bottom:			{ 350 + (card_style.text.layout.blocks.4.bottom or else 0) }
+		z index:		23
+		alignment:		left middle
+		font:
+			name:			BrandonGrotesqueCond-Medium
+			italic name:	BrandonGrotesqueCond-MediumIt
+			size:			14
+			scale down to:	8
+			color:			white
+		symbol font:
+			name:			lorcana-symbols-nim
+			size:			14
+			scale down to:	8
+		padding left:			6
+		padding right:			5
+		line height hard:		1.0
+		line height line:		1.1
+		line height soft:		0.75
+		line height hard max:	1.3
+		line height line max:	1.6
+
+card style:
+	ability 6 name:
+		left:			418
+		top:			{ 350 + (card_style.text.layout.blocks.5.top or else 0) }
+		width:			{ if card.lore == "no box" then 338 else 307 }
+		bottom:			{ 350 + (card_style.text.layout.blocks.5.bottom or else 0) }
+		z index:		23
+		alignment:		left middle
+		font:
+			name:			BrandonGrotesqueCond-Medium
+			italic name:	BrandonGrotesqueCond-MediumIt
+			size:			14
+			scale down to:	8
+			color:			white
+		symbol font:
+			name:			lorcana-symbols-nim
+			size:			14
+			scale down to:	8
+		padding left:			6
+		padding right:			5
+		line height hard:		1.0
+		line height line:		1.1
+		line height soft:		0.75
+		line height hard max:	1.3
+		line height line max:	1.6
+
+card style:
+	strength:
+		left:			276
+		top:			277
+		width:			31
+		height:			56
+		z index:		22
+		alignment:		center middle
+		font:
+			name:				Illuminumbers
+			size:				22
+			color:				black
+
+card style:
+	will:
+		left:			319
+		top:			277
+		width:			31
+		height:			56
+		z index:		22
+		alignment:		center middle
+		font:
+			name:				Illuminumbers
+			size:				22
+			color:				white
+
+card style:
+	lore:
+		left:			325
+		top:			348
+		width:			32
+		height:			136
+		z index:		39
+		popup style:	in place
+		render style:	image
+		image:			{ if card.lore == "no box" then "" else card.lore + "_snarfblatt.png" }
+
+card style:
+	illustrator:
+		left:			38
+		top:			491
+		width:			200
+		height:			10
+		z index:		21
+		alignment:		left middle
+		font:
+			name:				Beleren Small Caps Bold
+			size:				9
+			color:				white
+
+card style:
+	identification:
+		left:			{ 17 + card_style.custom_identification.content_width }
+		top:			504
+		width:			190
+		height:			10
+		z index:		21
+		alignment:		left middle
+		font:
+			name:				Beleren Small Caps Bold
+			size:				9
+			color:				white
+
+card style:
+	custom identification:
+		left:			17
+		top:			504
+		width:			190
+		height:			10
+		z index:		21
+		alignment:		left middle
+		font:
+			name:				Beleren Small Caps Bold
+			size:				9
+			color:				white
+
+card style:
+	copyright:
+		right:			{ 358 - card_style.custom_copyright.content_width }
+		top:			504
+		width:			150
+		height:			10
+		z index:		21
+		alignment:		right middle
+		font:
+			name:				Beleren Small Caps Bold
+			size:				9
+			color:				white
+
+card style:
+	custom copyright:
+		right:			358
+		top:			504
+		width:			150
+		height:			10
+		z index:		21
+		alignment:		right middle
+		font:
+			name:				Beleren Small Caps Bold
+			size:				9
+			color:				white
+
+
+
+####################### Extra Card Field Definitions
+
+extra card field:
+	type:				choice
+	name:				illustrator brush
+	editable:			false
+	save value:			false
+	choice:				dummy choice
+
+extra card field:
+	type:				choice
+	name:				sw box
+	editable:			false
+	save value:			false
+	choice:				imposter choice
+
+extra card field:
+	type:				choice
+	name:				flavor bar
+	editable:			false
+	save value:			false
+	choice:				charlatan choice
+
+extra card field:
+	type:				choice
+	name:				ability 1 name background
+	editable:			false
+	save value:			false
+	choice:				quack choice
+
+extra card field:
+	type:				choice
+	name:				ability 1 name background edge
+	editable:			false
+	save value:			false
+	choice:				fraud choice
+
+extra card field:
+	type:				choice
+	name:				ability 2 name background
+	editable:			false
+	save value:			false
+	choice:				usurper choice
+
+extra card field:
+	type:				choice
+	name:				ability 2 name background edge
+	editable:			false
+	save value:			false
+	choice:				fake choice
+
+extra card field:
+	type:				choice
+	name:				ability 3 name background
+	editable:			false
+	save value:			false
+	choice:				misleading choice
+
+extra card field:
+	type:				choice
+	name:				ability 3 name background edge
+	editable:			false
+	save value:			false
+	choice:				pretender choice
+
+extra card field:
+	type:				choice
+	name:				ability 4 name background
+	editable:			false
+	save value:			false
+	choice:				deceiver choice
+
+extra card field:
+	type:				choice
+	name:				ability 4 name background edge
+	editable:			false
+	save value:			false
+	choice:				cheat choice
+
+extra card field:
+	type:				choice
+	name:				ability 5 name background
+	editable:			false
+	save value:			false
+	choice:				bogus choice
+
+extra card field:
+	type:				choice
+	name:				ability 5 name background edge
+	editable:			false
+	save value:			false
+	choice:				sham choice
+
+extra card field:
+	type:				choice
+	name:				ability 6 name background
+	editable:			false
+	save value:			false
+	choice:				manufactured choice
+
+extra card field:
+	type:				choice
+	name:				ability 6 name background edge
+	editable:			false
+	save value:			false
+	choice:				insincere choice
+
+
+
+####################### Extra Card Field Looks
+
+extra card style:
+	illustrator brush:
+		left:			17
+		top:			493
+		width:			18
+		height:			9
+		z index:		11
+		render style:	image
+		image:			sample.png
+
+extra card style:
+	sw box:
+		left:			268
+		top:			277
+		width:			86
+		height:			56
+		visible: 		{ card.sw != "" }
+		z index:		3
+		render style:	image
+		image:			{ "sw/" + card.ink + "_sw.png" }
+
+extra card style:
+	flavor bar:
+		left:			29
+		#top:			{ 350 + (card_style.text.layout.blocks.6.top or else 0) - (ability_name_height(card.ability_1_name) * 7 / 52) }
+		top:			{ flavor_bar_top() }
+		width:			287
+		height:			{ ability_name_height(card.ability_1_name) * 7 / 26 }
+		z index:		3
+		visible:		{ set.use_flavor_bar and remove_tags(card.flavor_text) != "" }
+		render style:	image
+		image:			flavor_bar.png
+
+extra card style:
+	ability 1 name background:
+		left:			18
+		top:			{ 353 + ability_name_top(card.ability_1_name) + background_top_correction() }
+		width:			{ 5 + ability_name_width(card.ability_1_name) }
+		height:			{ ability_name_height(card.ability_1_name) * 20 / 26 }
+		visible: 		{ card.ability_1_name != "" }
+		z index:		3
+		render style:	image
+		image:			{ crop("ability_name_background.png", height: 20, width: 5 + ability_name_width(card.ability_1_name), offset_x: 395 - ability_name_width(card.ability_1_name), offset_y: 0) }
+
+extra card style:
+	ability 2 name background:
+		left:			18
+		top:			{ 353 + ability_name_top(card.ability_2_name) + background_top_correction() }
+		width:			{ 5 + ability_name_width(card.ability_2_name) }
+		height:			{ ability_name_height(card.ability_2_name) * 20 / 26 }
+		visible: 		{ card.ability_2_name != "" }
+		z index:		3
+		render style:	image
+		image:			{ crop("ability_name_background.png", height: 20, width: 5 + ability_name_width(card.ability_2_name), offset_x: 395 - ability_name_width(card.ability_2_name), offset_y: 0) }
+
+extra card style:
+	ability 3 name background:
+		left:			18
+		top:			{ 353 + ability_name_top(card.ability_3_name) + background_top_correction() }
+		width:			{ 5 + ability_name_width(card.ability_3_name) }
+		height:			{ ability_name_height(card.ability_3_name) * 20 / 26 }
+		visible: 		{ card.ability_3_name != "" }
+		z index:		3
+		render style:	image
+		image:			{ crop("ability_name_background.png", height: 20, width: 5 + ability_name_width(card.ability_3_name), offset_x: 395 - ability_name_width(card.ability_3_name), offset_y: 0) }
+
+extra card style:
+	ability 4 name background:
+		left:			18
+		top:			{ 353 + ability_name_top(card.ability_4_name) + background_top_correction() }
+		width:			{ 5 + ability_name_width(card.ability_4_name) }
+		height:			{ ability_name_height(card.ability_4_name) * 20 / 26 }
+		visible: 		{ card.ability_4_name != "" }
+		z index:		3
+		render style:	image
+		image:			{ crop("ability_name_background.png", height: 20, width: 5 + ability_name_width(card.ability_4_name), offset_x: 395 - ability_name_width(card.ability_4_name), offset_y: 0) }
+
+extra card style:
+	ability 5 name background:
+		left:			18
+		top:			{ 353 + ability_name_top(card.ability_5_name) + background_top_correction() }
+		width:			{ 5 + ability_name_width(card.ability_5_name) }
+		height:			{ ability_name_height(card.ability_5_name) * 20 / 26 }
+		visible: 		{ card.ability_5_name != "" }
+		z index:		3
+		render style:	image
+		image:			{ crop("ability_name_background.png", height: 20, width: 5 + ability_name_width(card.ability_5_name), offset_x: 395 - ability_name_width(card.ability_5_name), offset_y: 0) }
+
+extra card style:
+	ability 6 name background:
+		left:			18
+		top:			{ 353 + ability_name_top(card.ability_6_name) + background_top_correction() }
+		width:			{ 5 + ability_name_width(card.ability_6_name) }
+		height:			{ ability_name_height(card.ability_6_name) * 20 / 26 }
+		visible: 		{ card.ability_6_name != "" }
+		z index:		3
+		render style:	image
+		image:			{ crop("ability_name_background.png", height: 20, width: 5 + ability_name_width(card.ability_6_name), offset_x: 395 - ability_name_width(card.ability_6_name), offset_y: 0) }
+
+extra card style:
+	ability 1 name background edge:
+		left:			{ 23 + ability_name_width(card.ability_1_name) }
+		top:			{ 353 + ability_name_top(card.ability_1_name) + background_top_correction() }
+		width:			{ ability_name_height(card.ability_1_name) * 7 / 26 }
+		height:			{ ability_name_height(card.ability_1_name) * 20 / 26 }
+		visible: 		{ card.ability_1_name != "" }
+		z index:		3
+		render style:	image
+		image:			ability_name_background_edge.png
+
+extra card style:
+	ability 2 name background edge:
+		left:			{ 23 + ability_name_width(card.ability_2_name) }
+		top:			{ 353 + ability_name_top(card.ability_2_name) + background_top_correction() }
+		width:			{ ability_name_height(card.ability_2_name) * 7 / 26 }
+		height:			{ ability_name_height(card.ability_2_name) * 20 / 26 }
+		visible: 		{ card.ability_2_name != "" }
+		z index:		3
+		render style:	image
+		image:			ability_name_background_edge.png
+
+extra card style:
+	ability 3 name background edge:
+		left:			{ 23 + ability_name_width(card.ability_3_name) }
+		top:			{ 353 + ability_name_top(card.ability_3_name) + background_top_correction() }
+		width:			{ ability_name_height(card.ability_3_name) * 7 / 26 }
+		height:			{ ability_name_height(card.ability_3_name) * 20 / 26 }
+		visible: 		{ card.ability_3_name != "" }
+		z index:		3
+		render style:	image
+		image:			ability_name_background_edge.png
+
+extra card style:
+	ability 4 name background edge:
+		left:			{ 23 + ability_name_width(card.ability_4_name) }
+		top:			{ 353 + ability_name_top(card.ability_4_name) + background_top_correction() }
+		width:			{ ability_name_height(card.ability_4_name) * 7 / 26 }
+		height:			{ ability_name_height(card.ability_4_name) * 20 / 26 }
+		visible: 		{ card.ability_4_name != "" }
+		z index:		3
+		render style:	image
+		image:			ability_name_background_edge.png
+
+extra card style:
+	ability 5 name background edge:
+		left:			{ 23 + ability_name_width(card.ability_5_name) }
+		top:			{ 353 + ability_name_top(card.ability_5_name) + background_top_correction() }
+		width:			{ ability_name_height(card.ability_5_name) * 7 / 26 }
+		height:			{ ability_name_height(card.ability_5_name) * 20 / 26 }
+		visible: 		{ card.ability_5_name != "" }
+		z index:		3
+		render style:	image
+		image:			ability_name_background_edge.png
+
+extra card style:
+	ability 6 name background edge:
+		left:			{ 23 + ability_name_width(card.ability_6_name) }
+		top:			{ 353 + ability_name_top(card.ability_6_name) + background_top_correction() }
+		width:			{ ability_name_height(card.ability_6_name) * 7 / 26 }
+		height:			{ ability_name_height(card.ability_6_name) * 20 / 26 }
+		visible: 		{ card.ability_6_name != "" }
+		z index:		3
+		render style:	image
+		image:			ability_name_background_edge.png

@@ -1,0 +1,203 @@
+
+statistics dimension:
+	name: Ink
+	position hint: 0
+	icon: icons/ink.png
+	description: The ink type.
+	show empty: false
+	script: if filter_stat() == "Filtered" then "" else ink_stat()
+	group: amber
+	group: amethyst
+	group: emerald
+	group: ruby
+	group: sapphire
+	group: steel
+	colors:
+		amber		: rgb(240,179,64)
+		amethyst	: rgb(118,62,135)
+		emerald		: rgb(48,119,57)
+		ruby		: rgb(206,31,56)
+		sapphire	: rgb(16,95,140)
+		steel		: rgb(114,121,137)
+
+statistics dimension:
+	name: Cost
+	position hint: 10
+	icon: icons/ink.png
+	description: The ink cost.
+	numeric: true
+	script: if filter_stat() == "Filtered" then "" else cost_stat()
+
+statistics dimension:
+	name: Inkwell
+	position hint: 11
+	icon: icons/ink.png
+	description: Does the card have and inkwell or not.
+	script: if filter_stat() == "Filtered" then "" else inkwell_stat()
+	group: inkwell
+	group: no inkwell
+	colors:
+		inkwell		: rgb(0,0,0)
+		no inkwell	: rgb(240,240,240)
+	
+statistics dimension:
+	name: type
+	position hint: 20
+	icon: icons/type.png
+	description: The type of card.
+	split list: true
+	show empty: false
+	script: if filter_stat() == "Filtered" then "" else type_stat()
+	group: character
+	group: item
+	group: action
+	group: song
+	colors:
+		​character	: rgb(16,95,140)
+		​​item		: rgb(114,121,137)
+		​​​action		: rgb(206,31,56)
+		​​​​song		: rgb(240,179,64)
+
+statistics dimension:
+	name: classification
+	position hint: 30
+	icon: icons/type.png
+	description: All the classifications.
+	split list: true
+	show empty: false
+	script: if filter_stat() == "Filtered" then "" else classification_stat()
+
+statistics dimension:
+	name: strength
+	position hint: 100
+	icon: icons/strength.png
+	description: The strength of a character.
+	numeric: true
+	script: if filter_stat() == "Filtered" then "" else strength_stat()
+
+statistics dimension:
+	name: will
+	position hint: 110
+	icon: icons/willpower.png
+	description: The will of a character.
+	numeric: true
+	script: if filter_stat() == "Filtered" then "" else will_stat()
+
+statistics dimension:
+	name: lore
+	position hint: 120
+	icon: icons/lore.png
+	description: The lore value of a character.
+	script: if filter_stat() == "Filtered" then "" else lore_stat()
+
+statistics dimension:
+	name: rarity
+	position hint: 200
+	icon: icons/rarity.png
+	description: The rarity.
+	show empty: false
+	script: if filter_stat() == "Filtered" then "" else rarity_stat()
+	group: common
+	group: uncommon
+	group: rare
+	group: super rare
+	group: legendary
+	colors:
+		common			: rgb(33,33,33)
+		uncommon		: rgb(187,187,187)
+		rare			: rgb(209,191,91)
+		super rare		: rgb(210,96,34)
+		legendary		: rgb(176,11,15)
+
+statistics dimension:
+	name: keywords
+	position hint: 300
+	icon: icons/keywords.png
+	description: The keywords.
+	split list: true
+	show empty: false
+	script: if filter_stat() == "Filtered" then "" else keyword_usage(unique: true)
+
+statistics dimension:
+	name: word count
+	position hint: 400
+	icon: icons/text_length.png
+	description: How many words are in the card's various ability texts.
+	numeric: true
+	bin size: 5
+	show empty: false
+	script: if filter_stat() == "Filtered" then "" else total_word_count_stat()
+
+#statistics dimension:
+#	name: line count
+#	position hint: 410
+#	icon: icons/text_length.png
+#	description: How many lines are in the card's various ability texts.
+#	numeric: true
+#	show empty: false
+#	script: if filter_stat() == "Filtered" then "" else total_line_count_stat()		# Not reliable atm.
+
+statistics dimension:
+	name: paragraph count
+	position hint: 420
+	icon: icons/text_length.png
+	description: How many paragraphs are in the card's various ability texts.
+	numeric: true
+	show empty: false
+	script: if filter_stat() == "Filtered" then "" else total_paragraph_count_stat()
+
+statistics dimension:
+	name: split notes
+	position hint: 500
+	icon: icons/text_length.png
+	description: Cuts the card notes at each semicolon, each dot, each exclamation mark and each comma. For example, if you write "Removal, Board Wipe; Draw" the card will count in the "Removal" category, the "Board Wipe" and the "Draw" category. You can make whatever categories you like.
+	split list: true
+	show empty: false
+	script: if filter_stat() == "Filtered" then "" else split_notes_stat()
+
+statistics dimension:
+	name: illustrator
+	position hint: 600
+	icon: icons/illustrator.png
+	description: The artists of the card. Counts each side/face separately.
+	split list: true
+	show empty: false
+	script: if filter_stat() == "Filtered" then "" else illustrator_stat()
+
+statistics dimension:
+	name: ink drop hit % (Play)
+	position hint: 1000
+	icon: icons/ink.png
+	description: If the set is a deck, probability of hitting every single ink drop up to the given turn, when on the play.
+	split list: true
+	show empty: false
+	script: ink_drop_hit_percentage_stat(start: 6)
+
+statistics dimension:
+	name: ink drop hit % (Draw)
+	position hint: 1010
+	icon: icons/ink.png
+	description: If the set is a deck, probability of hitting every single ink drop up to the given turn, when on the draw.
+	split list: true
+	show empty: false
+	script: ink_drop_hit_percentage_stat(start: 7)
+
+statistics dimension:
+	name: average opening hand
+	position hint: 1100
+	icon: icons/hand.png
+	description: How many cards of each type on average will be in an opening hand.
+	split list: true
+	show empty: false
+	script: average_opening_hand_stat()
+
+statistics dimension:
+	name: filter
+	position hint: 2000
+	icon: icons/filter.png
+	description: Shows which cards have been filtered by the conditions written in the "filter statistics" field in the Set info tab.
+	show empty: false
+	script: filter_stat()
+	colors:
+		Kept		: rgb(15,80,166)
+		Filtered	: rgb(156,15,15)

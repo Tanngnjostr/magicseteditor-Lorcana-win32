@@ -1,0 +1,264 @@
+
+ink_stat :=
+{
+	card.ink
+}
+
+cost_stat :=
+{
+	to_number(card.cost)
+}
+
+inkwell_stat :=
+{
+	replace(card.inkwell, match: " ", replace: " ")		#replace normal spaces with EN spaces to get around a display bug
+}
+
+type_stat :=
+{
+	if contains(card.type, match: "song")			or contains(card.type, match: "Song")	then	"song"
+	else if contains(card.type, match: "action")	or contains(card.type, match: "Action")	then	"action"
+	else if contains(card.type, match: "item")		or contains(card.type, match: "Item")	then	"item"
+	else																							"character"
+}
+
+classification_stat :=
+{
+	result := clean_commas_stat(replace(remove_tags(card.type), match: "• ", replace: ","))
+	if result == "" then " No Classification" else result
+}
+
+strength_stat :=
+{
+	to_number(card.strength)
+}
+
+will_stat :=
+{
+	to_number(card.will)
+}
+
+lore_stat :=
+{
+	card.lore
+}
+
+rarity_stat :=
+{
+	replace(card.rarity, match: " ", replace: " ")		#replace normal spaces with EN spaces to get around a display bug
+}
+
+total_word_count_stat :=
+{
+	for x from 1 to 6 do
+	(
+		word_count_stat(card["ability_" + x])
+	)
+}
+word_count_stat := break_text@(match:"[^[:space:]]+") + length
+
+total_line_count_stat :=
+{
+	card_style.text.content_lines		# card_style does not initialize correctly when loading the set, so this is unreliable atm.
+}
+
+total_paragraph_count_stat :=
+{
+	for x from 1 to 6 do
+	(
+		text := card["ability_" + x]
+		if text == "" or text == "​" then 0 else 1 + line_count_stat(text) - soft_line_count_stat(text)		# There is a zero width space in the second ""
+	)
+}
+line_count_stat := break_text@(match: "\\n") + length
+soft_line_count_stat := break_text@(match: "<soft-line>") + length
+
+split_notes_stat :=
+{
+	regex := if set.card_notes_split == "" then " *(\\.|\\n|;|,|(?=!)) *" else set.card_notes_split
+	regex := replace_full_width_commas_stat(regex)
+	notes := replace_full_width_commas_stat(card.notes)
+	result := replace(notes, match: regex, replace: ",")
+	result := clean_commas_stat(result)
+	result
+}
+clean_commas_stat := replace@(match: ",+", replace: ",") + replace@(match: "^,", replace: "") + replace@(match: ",$", replace: "")
+replace_full_width_commas_stat := replace@(match:",", replace: "，")
+
+illustrator_stat :=
+{
+	result := trim(replace_full_width_commas_stat(card.illustrator))
+	if result == "" then " No Artist" else result
+}
+
+ink_drop_hit_percentage_stat :=
+{
+	if card != set.cards.0 then "" else (
+	card_count := length(set.cards)
+	if card_count <= start then "Not enough cards to draw an opening hand." else (
+	ink_count := for x from 0 to card_count-1 do (if set.cards[x].inkwell == "inkwell" then 1 else 0)
+	if ink_count == 0 then "No inkable cards found. 0% chance to hit ink drops." else (
+	
+	max_turns := min(10, card_count-start)
+	probability_per_turn := for t from 1 to max_turns do [100*hypergeometric_sum_stat(population: card_count, successes_in_population: ink_count, sample: start+t, turn: t)]
+	probability_string_per_turn := for t from 1 to max_turns do
+	(
+		split := split_text(match: "\\.", to_string(probability_per_turn[t-1]))
+		number := split[0]
+		digit := if (split[1] or else "") == "" then "0" else split[1].0
+		["Turn " + t + " — " + number + "." + digit + "%"]
+	)
+	result := for t from 1 to max_turns do
+	(
+		count := to_int(probability_per_turn[t-1])
+		if count == 0 then count := 1
+		for x from 1 to count do ("," + probability_string_per_turn[t-1])
+	)
+	substring(result, begin: 1))))
+}
+hypergeometric_sum_stat :=
+{
+	max_succes := min(successes_in_population, sample)
+	for x from turn to max_succes do hypergeometric_formula_stat(population: population, successes_in_population: successes_in_population, sample: sample, successes_in_sample: x)
+}
+hypergeometric_formula_stat :=
+{
+	n_choose_k_stat(n: successes_in_population, k: successes_in_sample) * n_choose_k_stat(n: population - successes_in_population, k: sample - successes_in_sample) / n_choose_k_stat(n: population, k: sample)
+}
+n_choose_k_stat :=
+{
+	accumulator := 1.0;
+	for x from 0 to k-1 do (accumulator := accumulator * to_real(n-x) / to_real(k-x))
+	accumulator
+}
+
+average_opening_hand_stat :=
+{
+	averages := split_text(set.global_variable_average_opening_hand, match: ";")
+	if length(averages) != 5 then set.global_variable_average_opening_hand else (
+	result := if card.inkwell == "inkwell" then averages[0] else ""
+	type := type_stat()
+	if		type == "character"	then result := result + averages[1]
+	else if	type == "item"		then result := result + averages[2]
+	else if	type == "action"	then result := result + averages[3]
+	else if	type == "song"		then result := result + averages[4]
+	substring(result, begin: 1))
+}
+global_variable_average_opening_hand_stat :=
+{
+	card_count := length(set.cards)-1
+	if card_count < 6 then "Not enough cards to draw an opening hand." else (
+	card_count_real := to_real(card_count+1)
+	
+	inkables := 0
+	characters := 0
+	items := 0
+	actions := 0
+	songs := 0
+	for x from 0 to card_count do
+	(
+		c := set.cards[x]
+		type := type_stat(card:c)
+		if		c.inkwell == "inkwell" then inkables := inkables + 1
+		if		type == "song" then songs := songs + 1
+		else if	type == "action" then actions := actions + 1
+		else if	type == "item" then items := items + 1
+		else if	type == "character" then characters := characters + 1
+	)
+	
+	inkable_average := format_average_stat(7.0 * to_number(inkables) / card_count_real)
+	characters_average := format_average_stat(7.0 * to_number(characters) / card_count_real)
+	items_average := format_average_stat(7.0 * to_number(items) / card_count_real)
+	actions_average := format_average_stat(7.0 * to_number(actions) / card_count_real)
+	songs_average := format_average_stat(7.0 * to_number(songs) / card_count_real)
+	
+	",​Inkable — " + inkable_average +
+	";,​​Characters — " + characters_average +
+	";,​​​Items — " + items_average +
+	";,​​​​Actions — " + actions_average +
+	";,​​​​​Songs — " + songs_average)
+}
+format_average_stat :=
+{
+	split := split_text(match: "\\.", to_string(input))
+	number := split[0]
+	digits := if (split[1] or else "") == "" then "00" else split[1]
+	if length(digits) == 1 then digits := digits + "0"
+	else if length(digits) > 2 then digits := substring(digits, end:2)
+	number + "." + digits
+}
+
+filter_stat :=
+{
+	if set.filter_statistics == "" then "Kept" else (
+	initial := escape_quotes_filter_stat(replace_squote_stat(set.filter_statistics))
+	negate := if initial.0 == "!" then (initial := substring(initial, begin:1); true) else false
+	initial_filters := get_filter_values_stat(initial)
+	initial_keys := get_filter_keys_stat(initial)
+	initial_modes := get_filter_modes_stat(initial)
+	count := length(initial_filters)-1
+	if count != length(initial_keys)-1 or count != length(initial_modes)-1 then "!! Failed to parse filters !!" else (
+	fields := []
+	filters := []
+	keys := []
+	modes := []
+	for x from 0 to count do
+	(
+		key := trim(initial_keys[x])
+		mode := initial_modes[x]
+		field :=		if		key == "artist" then			card.illustrator
+						else if	key == "color"
+							or	key == "ink type"
+							or	key == "ink_type" then			ink_stat()
+						else if	key == "inkable" then			card.inkwell
+						else if	key == "casting_cost"
+							or	key == "casting cost" then		card.cost
+						else if	key == "card_notes"
+							or	key == "card notes"
+							or	key == "sorted_notes"
+							or	key == "sorted notes" then		card.notes
+						else									(card[key] or else card[replace_space_stat(key)]) or else nil
+		filter := remove_quotes_stat(initial_filters[x])
+		fields := fields + [escape_quotes_field_stat(replace_squote_stat(field))]
+		filters := filters + [filter]
+		keys := keys + [key]
+		modes := modes + [mode]
+	)
+	message := "Kept"
+	for x from 0 to count do
+	(
+		if message == "Kept" or message == "Filtered" then (
+		if fields[x] == nil then message := "!! Could not find card field named [ " + keys[x] + " ] !!" else (
+		field := trim(remove_tags(fields[x]))
+		filter := filters[x]
+		key := keys[x]
+		mode := modes[x]
+		if		(mode == "==" and field != filter)
+			or	(mode == "!=" and field == filter)
+			or	(mode == "=:" and not contains(to_lower(field), match: to_lower(filter)))
+			or	(mode == "!:" and contains(to_lower(field), match: to_lower(filter)))		then message := "Filtered"
+		else if (mode == "\<=" or mode == ">=") and field != ""								then (	field_number := to_number(field) or else nil
+																									filter_number := to_number(filter) or else nil
+																									if		field_number == nil									then message := "!! Could not convert the value of card field [ " + key + " ] to a number !!"
+																									else if	filter_number == nil								then message := "!! Could not convert the value of filter [ " + key + mode + "\"" + unescape_quotes_filter_stat(filter) + "\" ] to a number !!"
+																									else if	(mode == "\<=" and field_number > filter_number)
+																										or	(mode == ">=" and field_number < filter_number)		then message := "Filtered")))
+	)
+	if		message == "Filtered" and negate then	"Kept"
+	else if	message == "Kept" and negate then		"Filtered"
+	else											message))
+}
+unescape_quotes_filter_stat := replace@(match: "\\[\\[quoteescape\\]\\]", replace: "\\\\\"")
+escape_quotes_filter_stat := replace@(match: "(\\\\\")|“|”", replace: "[[quoteescape]]")
+escape_quotes_field_stat := replace@(match: "(\\\")|“|”", replace: "[[quoteescape]]")
+replace_squote_stat := replace@(match: "'", replace: "’")
+replace_space_stat := replace@(match: " ", replace: "_")
+get_filter_values_stat := trim + break_text@(match: "\"[^\"]*\"")
+get_filter_keys_stat := trim + replace@(match: "\"[^\"]*\"", replace: "") + replace@(match: "=:|!:|==|!=|\<=|>=", replace: "") + split_text@(match: ", ?")
+get_filter_modes_stat := trim + replace@(match: "\"[^\"]*\"", replace: "") + break_text@(match: "=:|!:|==|!=|\<=|>=")
+distil_color_filter_stat :=
+{
+	filter := distil_color_words_statistic(input)
+	if filter == "" then distil_colors_statistic(input) else filter
+}
+remove_quotes_stat := replace@(match: "\"", replace: "")

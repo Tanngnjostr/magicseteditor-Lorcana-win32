@@ -1,0 +1,69 @@
+﻿
+has keywords: true
+
+
+
+keyword mode:
+	name: core
+	description: Core keywords
+keyword mode:
+	name: expert
+	description: Expert set keywords
+keyword mode:
+	is default: true
+	name: custom
+	description: Custom keywords
+
+
+
+keyword parameter type:
+	name: number
+	match: [XYZ0-9]+
+	refer script:
+		name: normal
+		description: (1,2,3)
+		script: \{{input}\}
+	refer script:
+		name: as words
+		description: (one, two, three)
+		script: \{english_number({input})\}
+	refer script:
+		name: as words, use "a" for 1
+		description: (a, two, three)
+		script: \{english_number_a({input})\}
+	refer script:
+		name: as words, use "" for 1
+		description: (, two, three)
+		script: \{english_number_multiple({input})\}
+	refer script:
+		name: as ordinal words
+		description: (first, second, third)
+		script: \{english_number_ordinal({input})\}
+
+keyword parameter type:
+	name: english_number
+	match: (up to )?(a|an|one|two|three|four|five|six|seven|eight|nine|ten| )
+	refer script:
+		name: as a numeral
+		description: Changes english number to numeral
+		script: \{digital_number({input}.value)\}
+
+
+
+keyword:
+	keyword: Rush
+	match: Rush
+	mode: core
+	reminder: {this_or_that("character", upper: true)} character can challenge the turn they're played.
+
+keyword:
+	keyword: Evasive
+	match: Evasive
+	mode: core
+	reminder: Only characters with Evasive can challenge {this_or_that("character")} character.
+
+keyword:
+	keyword: Challenger
+	match: Challenger +<atom-param>number</atom-param>
+	mode: expert
+	reminder: While challenging, {this_or_that("character")} character gets +{param1}<sym-auto>strength</sym-auto>.

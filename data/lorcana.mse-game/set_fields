@@ -1,0 +1,178 @@
+
+set field:
+	type: info
+	name: Set Information
+
+set field:
+	type: text
+	name: title
+	identifying: true
+
+set field:
+	type: text
+	name: description
+	multi line: true
+
+set field:
+	type: text
+	name: copyright
+	default: "©Disney"
+
+set field:
+	type: text
+	name: set language
+	description: Typically, a two letter code for the language the set is in.
+
+set field:
+	type: text
+	name: set code
+	description: Typically, a three letter code for the set.
+
+set field:
+	type: color
+	name: border color
+	default: rgb(0,0,0)
+	choice:
+		name: black
+		color: rgb(0,0,0)
+	choice:
+		name: white
+		color: rgb(255,255,255)
+	choice:
+		name: silver
+		color: rgb(200,200,200)
+	choice:
+		name: gold
+		color: rgb(200,180,0)
+	show statistics: false
+	description: The default border color of the set.
+
+set field:
+	type: symbol
+	name: symbol
+	description: The symbol for this set, double click to edit
+
+set field:
+	type: info
+	name: Defaults and Automation
+
+set field:
+	type: multiple choice
+	name: automatic reminder text
+	choice: core
+	choice: expert
+	choice: custom
+	initial: expert, custom
+	description: For which kinds of keywords should reminder text be added by default? Note: you can enable/disable reminder text by right clicking the keyword.
+
+set field:
+	type: boolean
+	name: automatic card numbers
+	description: Should card numbers be shown on the cards?
+
+set field:
+	type: boolean
+	name: automatic set language
+	description: Should the set language be shown on the cards?
+
+set field:
+	type: boolean
+	name: automatic set code
+	description: Should the set code be shown on the cards?
+
+set field:
+	type: boolean
+	name: automatic copyright
+	description: Should the copyright line be shown on the cards?
+
+set field:
+	type: boolean
+	name: use flavor bar
+	description: Enables the flavor bar on Mainframe templates.
+
+set field:
+	type: boolean
+	name: mark errors
+	description: Marks errors on cards, for example wording and spelling errors, non unique card names, etc.
+
+set field:
+	type: boolean
+	name: remove card codes
+	description: Remove card codes from all card names. Cannot be undone.
+	initial: no
+
+set field:
+	type: text
+	name: custom sort
+	description: Sort by multiple card fields. Write the names of the card fields, separated by commas.
+
+set field:
+	type: info
+	name: Statistics
+
+set field:
+	type: text
+	name: filter statistics
+	description: Filter cards from the statistics. Syntax is: field_name_1=="value_1", field_name_2=="value_2", etc. Use == for strict equality, != for not equal, =: for contains, !: for not contains, <= and >= for numeric comparisons. Example: ink=="steel", cost<="4", ability=:"rush", classification!:"hero"
+
+set field:
+	type: text
+	name: card notes split
+	description: Regex used to split the card notes in the Split Notes statistics category. Default is " *(\.|\n|;|,|(?=!)) *" which splits at each semicolon, each dot, each exclamation mark and each comma.
+	default: " *(\\.|\\n|;|,|(?=!)) *"
+
+set field:
+	type: text
+	name: global_variable_average_opening_hand
+	script: global_variable_average_opening_hand_stat()
+
+
+
+default set style:
+	title:
+		padding left: 2
+		font:
+			size: 16
+	symbol:
+		max aspect ratio: 2.5
+		variation:
+			name: common
+			border radius: 0.07
+			fill type: solid
+			fill color:   rgb(160,170,170)
+			border color: rgb(0,0,0)
+		variation:
+			name: uncommon
+			border radius: 0.07
+			fill type: solid
+			fill color:   rgb(255,255,255)
+			border color: rgb(0,0,0)
+		variation:
+			name: rare
+			border radius: 0.07
+			fill type: linear gradient
+			fill color 1:   rgb(128,65,47)
+			fill color 2:   rgb(245,165,96)
+			border color 1: rgb(0,  0,  0)
+			border color 2: rgb(0,  0,  0)
+		variation:
+			name: super rare
+			border radius: 0.07
+			fill type: linear gradient
+			fill color 1:   rgb(81,90,105)
+			fill color 2:   rgb(193,198,202)
+			border color 1: rgb(0,  0,  0)
+			border color 2: rgb(0,  0,  0)
+		variation:
+			name: legendary
+			border radius: 0.10
+			fill type: linear gradient
+			fill color 1:   rgb(206,129,49)
+			fill color 2:   rgb(255,252,124)
+			border color 1: rgb(0,  0,  0)
+			border color 2: rgb(0,  0,  0)
+	automatic reminder text:
+		render style: checklist
+		direction: vertical
+	global_variable_average_opening_hand:
+		visible: false
