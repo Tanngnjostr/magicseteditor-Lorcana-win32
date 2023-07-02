@@ -32,19 +32,25 @@ full_name_script :=
 	)
 }
 
+type_filter :=
+{
+	input := remove_tag(input, tag: "<word-list-")
+	"<word-list-type>" + input + "</word-list-type>"
+}
+
 type_script :=
 {
 	combined_editor(
 		field1: card.type_1,
-		separator1: "• ",
+		separator1: " • ",
 		field2: card.type_2,
-		separator2: "• ",
+		separator2: " • ",
 		field3: card.type_3,
-		separator3: "• ",
+		separator3: " • ",
 		field4: card.type_4,
-		separator4: "• ",
+		separator4: " • ",
 		field5: card.type_5,
-		separator5: "• ",
+		separator5: " • ",
 		field6: card.type_6,
 		soft_before_empty: true,
 		hide_when_empty: true

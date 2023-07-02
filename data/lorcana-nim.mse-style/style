@@ -152,7 +152,7 @@ init script:
 	text_filter +
 	### add zero-width space to force abilities to have non zero height
 	{
-		if styling.number_of_abilities != "automatic" then "​" + input
+		if styling.number_of_abilities != "automatic" then "​" + input		### there is a zero-width space inside the ""
 		else input
 	}
 	
@@ -224,26 +224,26 @@ card style:
 		render style:	image
 		image:			{ "card/" + card.ink + "_card.png" }
 		choice images:
-			amber:		card/amber_card.png
-			amethyst:	card/amethyst_card.png
-			emerald:	card/emerald_card.png
-			ruby:		card/ruby_card.png
-			sapphire:	card/sapphire_card.png
-			steel:		card/steel_card.png
+			amber:			card/amber_card.png
+			amethyst:		card/amethyst_card.png
+			emerald:		card/emerald_card.png
+			ruby:			card/ruby_card.png
+			sapphire:		card/sapphire_card.png
+			steel:			card/steel_card.png
 
 card style:
 	cost:
-		left: 26
-		top: 28
-		width: 26
-		height: 30
-		alignment: center middle
+		left:			26
+		top:			28
+		width:			26
+		height:			30
+		z index:		40
+		alignment:		center middle
 		font:
-			name: Illuminumbers
-			size: 18
-			color: white
-		z index: 40
-
+			name:				Illuminumbers
+			size:				18
+			color:				white
+		
 card style:
 	inkwell:
 		left:			5
@@ -259,19 +259,19 @@ card style:
 
 card style:
 	type:
-		left: 23
-		top: 330
-		width: 329
-		height: 19
-		alignment: center shrink-overflow
-		z index: 2
-		padding top: -3
+		left:			23
+		top:			330
+		width:			329
+		height:			19
+		z index:		2
+		alignment:		center shrink-overflow
+		padding top:	-3
 		font:
-			name: Brandon Grotesque Cond Black
-			size: 12
-			color: rgba(187,187,187,230)
-			style: italic
-			separator color: red
+			name:				Brandon Grotesque Cond Black
+			size:				12
+			color:				rgba(187,187,187,230)
+			style:				italic
+			separator color:	red
 
 card style:
 	name:
@@ -288,14 +288,14 @@ card style:
 				"left middle shrink-overflow"
 		padding bottom:
 			script:
-				if contains(card.type, match:"Action") or contains(card.type, match:"Item") then 
-				-12
-				else 
-				0
+				if (contains(card.type, match:"Action") or contains(card.type, match:"Item"))
+				and card.title == ""
+				then -12
+				else 0
 		font:
-			name:			The Bystander Collection Sans Medium
-			size:			21
-			color:			white
+			name:				The Bystander Collection Sans Medium
+			size:				21
+			color:				white
 
 card style:
 	title:
@@ -304,11 +304,11 @@ card style:
 		right:			352
 		height:			20
 		z index:		21
-		padding top: -2
+		padding top:	-2
 		font:
-			name:			Brandon Grotesque Cond Bold
-			size:			12
-			color:			white
+			name:				Brandon Grotesque Cond Bold
+			size:				12
+			color:				white
 
 card style:
 	illustration:
@@ -324,7 +324,7 @@ card style:
 		top:			{ popout_illustration_top() }
 		width:			{ popout_illustration_width() }
 		height:			{ popout_illustration_height() }
-		z index: 1000
+		z index:		1000
 
 card style:
 	text:

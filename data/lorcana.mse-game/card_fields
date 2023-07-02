@@ -29,7 +29,7 @@ card field:
 	card list visible: true
 	card list name: Full Name
 	card list column: 0
-	card list width: 150
+	card list width: 300
 	show statistics: false
 	description: The combined name and title of a card.
 
@@ -46,6 +46,7 @@ card field:
 	card list visible: true
 	card list name: Ink
 	card list column: 30
+	card list width: 80
 	show statistics: false
 	description: The frame of the card, used to indicate ink type.
 
@@ -65,6 +66,10 @@ card field:
 	choice:
 		name: gold
 		color: rgb(200,180,0)
+	card list visible: false
+	card list name: Border Color
+	card list column: 190
+	card list width: 80
 	show statistics: false
 	description: The border color of the card.
 
@@ -72,10 +77,10 @@ card field:
 	type: text
 	name: cost
 	card list visible: true
-	card list column: 40
-	card list alignment: right
-	card list width: 50
 	card list name: Cost
+	card list alignment: right
+	card list column: 40
+	card list width: 50
 	show statistics: false
 	description: The ink cost of the card.
 
@@ -88,12 +93,14 @@ card field:
 	card list visible: true
 	card list name: Inkwell
 	card list column: 50
+	card list width: 80
 	show statistics: false
 	description: The inkwell symbol, used to indicate if the card can be inked.
 
 card field:
 	type: text
 	name: type 1
+	script: type_filter(input: value)
 	card list visible: false
 	card list name: Type 1
 	card list column: 61
@@ -102,6 +109,7 @@ card field:
 card field:
 	type: text
 	name: type 2
+	script: type_filter(input: value)
 	card list visible: false
 	card list name: Type 2
 	card list column: 62
@@ -110,6 +118,7 @@ card field:
 card field:
 	type: text
 	name: type 3
+	script: type_filter(input: value)
 	card list visible: false
 	card list name: Type 3
 	card list column: 63
@@ -118,6 +127,7 @@ card field:
 card field:
 	type: text
 	name: type 4
+	script: type_filter(input: value)
 	card list visible: false
 	card list name: Type 4
 	card list column: 64
@@ -126,6 +136,7 @@ card field:
 card field:
 	type: text
 	name: type 5
+	script: type_filter(input: value)
 	card list visible: false
 	card list name: Type 5
 	card list column: 65
@@ -134,6 +145,7 @@ card field:
 card field:
 	type: text
 	name: type 6
+	script: type_filter(input: value)
 	card list visible: false
 	card list name: Type 6
 	card list column: 66
@@ -144,8 +156,9 @@ card field:
 	name: type
 	script: type_script()
 	card list visible: true
-	card list name: Types
+	card list name: Classifications
 	card list column: 60
+	card list width: 300
 	show statistics: false
 	description: The classifications of the card.
 
@@ -155,7 +168,7 @@ card field:
 	multi line: true
 	script: text_aggregate(input: value)
 	card list visible: false
-	card list name: Rule Text
+	card list name: Text
 	card list column: 70
 	show statistics: false
 	description: The entire rules text and flavor text of the card.
@@ -166,8 +179,9 @@ card field:
 	multi line: true
 	script: text_filter(input: value, ability_number: 1)
 	card list visible: false
-	card list name: A1 Text
+	card list name: Ability 1
 	card list column: 71
+	card list width: 100
 	show statistics: false
 	description: The rules text of the first ability or passive.
 
@@ -187,8 +201,9 @@ card field:
 	multi line: true
 	script: text_filter(input: value, ability_number: 2)
 	card list visible: false
-	card list name: A2 Text
+	card list name: Ability 2
 	card list column: 72
+	card list width: 100
 	show statistics: false
 	description: The rules text of the second ability or passive.
 
@@ -208,8 +223,9 @@ card field:
 	multi line: true
 	script: text_filter(input: value, ability_number: 3)
 	card list visible: false
-	card list name: A3 Text
+	card list name: Ability 3
 	card list column: 73
+	card list width: 100
 	show statistics: false
 	description: The rules text of the third ability or passive.
 
@@ -229,8 +245,9 @@ card field:
 	multi line: true
 	script: text_filter(input: value, ability_number: 4)
 	card list visible: false
-	card list name: A4 Text
+	card list name: Ability 4
 	card list column: 74
+	card list width: 100
 	show statistics: false
 	description: The rules text of the fourth ability or passive.
 
@@ -250,8 +267,9 @@ card field:
 	multi line: true
 	script: text_filter(input: value, ability_number: 5)
 	card list visible: false
-	card list name: A5 Text
+	card list name: Ability 5
 	card list column: 75
+	card list width: 100
 	show statistics: false
 	description: The rules text of the fifth ability or passive.
 
@@ -271,8 +289,9 @@ card field:
 	multi line: true
 	script: text_filter(input: value, ability_number: 6)
 	card list visible: false
-	card list name: A6 Text
+	card list name: Ability 6
 	card list column: 76
+	card list width: 100
 	show statistics: false
 	description: The rules text of the sixth ability or passive.
 
@@ -301,6 +320,7 @@ card field:
 	card list visible: false
 	card list name: Strength
 	card list column: 81
+	card list width: 50
 	show statistics: false
 	description: The strength of a character.
 
@@ -310,6 +330,7 @@ card field:
 	card list visible: false
 	card list name: Will
 	card list column: 82
+	card list width: 50
 	show statistics: false
 	description: The will of a character.
 
@@ -318,9 +339,9 @@ card field:
 	name: sw
 	script: sw_script()
 	card list visible: true
+	card list name: S/W
 	card list column: 80
 	card list width: 50
-	card list name: S/W
 	show statistics: false
 	description: The strength/will of a character.
 
@@ -339,6 +360,7 @@ card field:
 	card list visible: true
 	card list name: Lore
 	card list column: 90
+	card list width: 50
 	show statistics: false
 	description: The lore value of a character.
 
@@ -350,8 +372,9 @@ card field:
 	multi line: true
 	script: flavor_text_filter(value)
 	card list visible: false
-	card list name: Lore
+	card list name: Flavor Text
 	card list column: 100
+	card list width: 100
 	show statistics: false
 	description: The flavor text of the card.
 
@@ -376,8 +399,9 @@ card field:
 	choice: foil
 	initial: no foil
 	card list visible: true
-	card list name: Lore
+	card list name: Foil
 	card list column: 180
+	card list width: 60
 	show statistics: false
 	description: The foiling of the card.
 
@@ -396,6 +420,7 @@ card field:
 	card list visible: true
 	card list name: Rarity
 	card list column: 110
+	card list width: 100
 	show statistics: false
 	description: The rarity of the card.
 
@@ -405,6 +430,7 @@ card field:
 	card list visible: true
 	card list name: Illustrator
 	card list column: 120
+	card list width: 150
 	show statistics: false
 	description: The illustrator of the card.
 
@@ -415,6 +441,7 @@ card field:
 	card list visible: false
 	card list name: Set Code
 	card list column: 130
+	card list width: 50
 	show statistics: false
 	description: The code of the set, typically three uppercase letters.
 
@@ -425,6 +452,7 @@ card field:
 	card list visible: false
 	card list name: Set Lang
 	card list column: 140
+	card list width: 50
 	show statistics: false
 	description: The language of the set, typically two uppercase letters.
 
@@ -435,7 +463,7 @@ card field:
 	card list visible: true
 	card list name: #
 	card list column: 150
-	card list width: 50
+	card list width: 60
 	card list alignment: right
 	show statistics: false
 	description: The number of the card within the set. By default, cards are sorted by rarity, then by ink type, then by name.
@@ -515,7 +543,7 @@ card field:
 	type: text
 	name: custom sort
 	#script: custom_sort()
-	card list visible: true
+	card list visible: false
 	card list name: Custom Sort
 	card list column: 220
 	show statistics: false
