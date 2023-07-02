@@ -62,7 +62,7 @@ set field:
 	choice: core
 	choice: expert
 	choice: custom
-	initial: expert, custom
+	initial: core, expert, custom
 	description: For which kinds of keywords should reminder text be added by default? Note: you can enable/disable reminder text by right clicking the keyword.
 
 set field:
@@ -87,24 +87,19 @@ set field:
 
 set field:
 	type: boolean
-	name: use flavor bar
-	description: Enables the flavor bar on Mainframe templates.
-
-set field:
-	type: boolean
-	name: mark errors
-	description: Marks errors on cards, for example wording and spelling errors, non unique card names, etc.
+	name: spell check
+	description: Marks spelling errors on cards.
 
 set field:
 	type: boolean
 	name: remove card codes
-	description: Remove card codes from all card names. Cannot be undone.
+	description: Remove 4-letter card codes from all card names. Cannot be undone.
 	initial: no
 
-set field:
-	type: text
-	name: custom sort
-	description: Sort by multiple card fields. Write the names of the card fields, separated by commas.
+#set field:
+#	type: text
+#	name: custom sort
+#	description: Sort by multiple card fields. Write the names of the card fields, separated by commas. (Currently not implemented.)
 
 set field:
 	type: info

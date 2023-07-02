@@ -27,7 +27,7 @@ card width:		375
 card height:	523
 card dpi:		150
 
-## By nim and GenevensiS
+### By nim and GenevensiS
 
 
 
@@ -36,27 +36,166 @@ card dpi:		150
 init script:
 	flavor_bar_top :=
 	{
-		352 +
-		((card_style.text.layout.blocks[last_active_ability()-1].bottom or else 0) + (card_style.text.layout.blocks[6].top or else 0))/2 -
-		ability_name_height(card.ability_1_name) * 7 / 52
+		last_ability := last_active_ability()
+		rule_text_bottom := card_style.text.layout.blocks[last_ability-1].bottom or else 0.0
+		flavor_text_top := card_style.text.layout.blocks[last_ability].top or else 0.0
+		mid_point := (rule_text_bottom + flavor_text_top) / 2.0
+		350.0 + mid_point
 	}
-
-	background_top_correction :=
+	flavor_bar_image :=
+	{
+		if		styling.flavor_bar == "none"	then	""
+		else if	styling.flavor_bar == "diamond"	then	"flavor_bar_diamond.png"
+		else if	styling.flavor_bar == "book"	then	"flavor_bar_book.png"
+		else if	styling.flavor_bar == "treble"	then	"flavor_bar_treble.png"
+		else
+		(
+			if		type_stat() == "song"					then	"flavor_bar_treble.png"
+			else if contains(card.type, match:"Storyborn")	then	"flavor_bar_book.png"
+			else													"flavor_bar_diamond.png"
+		)
+	}
+	flavor_bar_height :=
+	{
+		line_height := card_style.text.layout.blocks.0.lines.0.height
+		line_height * 7.0 / 26.0
+	}
+	flavor_bar_visible :=
+	{
+		styling.flavor_bar != "none" and remove_tags(card.flavor_text) != ""
+	}
+	
+	ability_name_background_top_correction :=
 	{
 		height := ability_name_height(card.ability_1_name)
 		if height > 21 then 1
 		else 0
 	}
-
+	
 	popout_illustration_left := { to_int(split_commas(styling.popout_illustration_coordinates).0 or else 0) }
 	popout_illustration_top := { to_int(split_commas(styling.popout_illustration_coordinates).1 or else 0) }
 	popout_illustration_width := { to_int(split_commas(styling.popout_illustration_coordinates).2 or else 0) }
 	popout_illustration_height := { to_int(split_commas(styling.popout_illustration_coordinates).3 or else 0) }
+	
+	text_aggregate :=
+	{
+		if styling.number_of_abilities == "automatic" or styling.number_of_abilities == "6" then
+			combined_editor(
+				field1: card.ability_1,
+				separator1: "<line>\n</line>",
+				field2: card.ability_2,
+				separator2: "<line>\n</line>",
+				field3: card.ability_3,
+				separator3: "<line>\n</line>",
+				field4: card.ability_4,
+				separator4: "<line>\n</line>",
+				field5: card.ability_5,
+				separator5: "<line>\n</line>",
+				field6: card.ability_6,
+				separator6: "<line>\n</line>",
+				field7: card.flavor_text
+			)
+		else if styling.number_of_abilities == "5" then
+			combined_editor(
+				field1: card.ability_1,
+				separator1: "<line>\n</line>",
+				field2: card.ability_2,
+				separator2: "<line>\n</line>",
+				field3: card.ability_3,
+				separator3: "<line>\n</line>",
+				field4: card.ability_4,
+				separator4: "<line>\n</line>",
+				field5: card.ability_5,
+				separator5: "<line>\n</line>",
+				field6: card.flavor_text
+			)
+		else if styling.number_of_abilities == "4" then
+			combined_editor(
+				field1: card.ability_1,
+				separator1: "<line>\n</line>",
+				field2: card.ability_2,
+				separator2: "<line>\n</line>",
+				field3: card.ability_3,
+				separator3: "<line>\n</line>",
+				field4: card.ability_4,
+				separator4: "<line>\n</line>",
+				field5: card.flavor_text
+			)
+		else if styling.number_of_abilities == "3" then
+			combined_editor(
+				field1: card.ability_1,
+				separator1: "<line>\n</line>",
+				field2: card.ability_2,
+				separator2: "<line>\n</line>",
+				field3: card.ability_3,
+				separator3: "<line>\n</line>",
+				field4: card.flavor_text
+			)
+		else if styling.number_of_abilities == "2" then
+			combined_editor(
+				field1: card.ability_1,
+				separator1: "<line>\n</line>",
+				field2: card.ability_2,
+				separator2: "<line>\n</line>",
+				field3: card.flavor_text
+			)
+		else
+			combined_editor(
+				field1: card.ability_1,
+				separator1: "<line>\n</line>",
+				field2: card.flavor_text
+			)
+	}
+	
+	text_filter :=
+	### normal text filter
+	text_filter +
+	### add zero-width space to force abilities to have non zero height
+	{
+		if styling.number_of_abilities != "automatic" then "​" + input
+		else input
+	}
+	
+	last_active_ability :=
+	{
+		if styling.number_of_abilities == "automatic" then
+		(
+			if		card.ability_6 != ""	then	6
+			else if	card.ability_5 != ""	then	5
+			else if	card.ability_4 != ""	then	4
+			else if	card.ability_3 != ""	then	3
+			else if	card.ability_2 != ""	then	2
+			else									1
+		)
+		else to_int(styling.number_of_abilities)
+	}
 
 
 
 ####################### Styling Field Definitions
 
+styling field:
+	type: choice
+	name: number of abilities
+	choice: automatic
+	choice: 1
+	choice: 2
+	choice: 3
+	choice: 4
+	choice: 5
+	choice: 6
+	initial: automatic
+	description: The number of text fields for abilities and passives. Use the up and down arrow keys to navigate between ability fields.
+styling field:
+	type: choice
+	name: flavor bar
+	choice: automatic
+	choice: book
+	choice: treble
+	choice: diamond
+	choice: none
+	initial: automatic
+	description: The type of flavor bar.
 styling field:
 	type: text
 	name: popout illustration coordinates
@@ -66,13 +205,13 @@ styling field:
 
 ####################### Card Field Looks
 
-card style:
-##	border:
-##		left:			0
-##		top:			0
-##		width:			375
-##		height:			523
-##		z index:		1
+#card style:
+#	border:
+#		left:			0
+#		top:			0
+#		width:			375
+#		height:			523
+#		z index:		1
 
 card style:
 	ink:
@@ -147,7 +286,6 @@ card style:
 				"center bottom shrink-overflow"
 				else
 				"left middle shrink-overflow"
-		##alignment: center bottom
 		padding bottom:
 			script:
 				if contains(card.type, match:"Action") or contains(card.type, match:"Item") then 
@@ -616,19 +754,18 @@ extra card style:
 extra card style:
 	flavor bar:
 		left:			29
-		#top:			{ 350 + (card_style.text.layout.blocks.6.top or else 0) - (ability_name_height(card.ability_1_name) * 7 / 52) }
 		top:			{ flavor_bar_top() }
 		width:			287
-		height:			{ ability_name_height(card.ability_1_name) * 7 / 26 }
+		height:			{ flavor_bar_height() }
 		z index:		3
-		visible:		{ set.use_flavor_bar and remove_tags(card.flavor_text) != "" }
+		visible:		{ flavor_bar_visible() }
 		render style:	image
-		image:			flavor_bar.png
+		image:			{ flavor_bar_image() }
 
 extra card style:
 	ability 1 name background:
 		left:			18
-		top:			{ 353 + ability_name_top(card.ability_1_name) + background_top_correction() }
+		top:			{ 353 + ability_name_top(card.ability_1_name) + ability_name_background_top_correction() }
 		width:			{ 5 + ability_name_width(card.ability_1_name) }
 		height:			{ ability_name_height(card.ability_1_name) * 20 / 26 }
 		visible: 		{ card.ability_1_name != "" }
@@ -639,7 +776,7 @@ extra card style:
 extra card style:
 	ability 2 name background:
 		left:			18
-		top:			{ 353 + ability_name_top(card.ability_2_name) + background_top_correction() }
+		top:			{ 353 + ability_name_top(card.ability_2_name) + ability_name_background_top_correction() }
 		width:			{ 5 + ability_name_width(card.ability_2_name) }
 		height:			{ ability_name_height(card.ability_2_name) * 20 / 26 }
 		visible: 		{ card.ability_2_name != "" }
@@ -650,7 +787,7 @@ extra card style:
 extra card style:
 	ability 3 name background:
 		left:			18
-		top:			{ 353 + ability_name_top(card.ability_3_name) + background_top_correction() }
+		top:			{ 353 + ability_name_top(card.ability_3_name) + ability_name_background_top_correction() }
 		width:			{ 5 + ability_name_width(card.ability_3_name) }
 		height:			{ ability_name_height(card.ability_3_name) * 20 / 26 }
 		visible: 		{ card.ability_3_name != "" }
@@ -661,7 +798,7 @@ extra card style:
 extra card style:
 	ability 4 name background:
 		left:			18
-		top:			{ 353 + ability_name_top(card.ability_4_name) + background_top_correction() }
+		top:			{ 353 + ability_name_top(card.ability_4_name) + ability_name_background_top_correction() }
 		width:			{ 5 + ability_name_width(card.ability_4_name) }
 		height:			{ ability_name_height(card.ability_4_name) * 20 / 26 }
 		visible: 		{ card.ability_4_name != "" }
@@ -672,7 +809,7 @@ extra card style:
 extra card style:
 	ability 5 name background:
 		left:			18
-		top:			{ 353 + ability_name_top(card.ability_5_name) + background_top_correction() }
+		top:			{ 353 + ability_name_top(card.ability_5_name) + ability_name_background_top_correction() }
 		width:			{ 5 + ability_name_width(card.ability_5_name) }
 		height:			{ ability_name_height(card.ability_5_name) * 20 / 26 }
 		visible: 		{ card.ability_5_name != "" }
@@ -683,7 +820,7 @@ extra card style:
 extra card style:
 	ability 6 name background:
 		left:			18
-		top:			{ 353 + ability_name_top(card.ability_6_name) + background_top_correction() }
+		top:			{ 353 + ability_name_top(card.ability_6_name) + ability_name_background_top_correction() }
 		width:			{ 5 + ability_name_width(card.ability_6_name) }
 		height:			{ ability_name_height(card.ability_6_name) * 20 / 26 }
 		visible: 		{ card.ability_6_name != "" }
@@ -694,7 +831,7 @@ extra card style:
 extra card style:
 	ability 1 name background edge:
 		left:			{ 23 + ability_name_width(card.ability_1_name) }
-		top:			{ 353 + ability_name_top(card.ability_1_name) + background_top_correction() }
+		top:			{ 353 + ability_name_top(card.ability_1_name) + ability_name_background_top_correction() }
 		width:			{ ability_name_height(card.ability_1_name) * 7 / 26 }
 		height:			{ ability_name_height(card.ability_1_name) * 20 / 26 }
 		visible: 		{ card.ability_1_name != "" }
@@ -705,7 +842,7 @@ extra card style:
 extra card style:
 	ability 2 name background edge:
 		left:			{ 23 + ability_name_width(card.ability_2_name) }
-		top:			{ 353 + ability_name_top(card.ability_2_name) + background_top_correction() }
+		top:			{ 353 + ability_name_top(card.ability_2_name) + ability_name_background_top_correction() }
 		width:			{ ability_name_height(card.ability_2_name) * 7 / 26 }
 		height:			{ ability_name_height(card.ability_2_name) * 20 / 26 }
 		visible: 		{ card.ability_2_name != "" }
@@ -716,7 +853,7 @@ extra card style:
 extra card style:
 	ability 3 name background edge:
 		left:			{ 23 + ability_name_width(card.ability_3_name) }
-		top:			{ 353 + ability_name_top(card.ability_3_name) + background_top_correction() }
+		top:			{ 353 + ability_name_top(card.ability_3_name) + ability_name_background_top_correction() }
 		width:			{ ability_name_height(card.ability_3_name) * 7 / 26 }
 		height:			{ ability_name_height(card.ability_3_name) * 20 / 26 }
 		visible: 		{ card.ability_3_name != "" }
@@ -727,7 +864,7 @@ extra card style:
 extra card style:
 	ability 4 name background edge:
 		left:			{ 23 + ability_name_width(card.ability_4_name) }
-		top:			{ 353 + ability_name_top(card.ability_4_name) + background_top_correction() }
+		top:			{ 353 + ability_name_top(card.ability_4_name) + ability_name_background_top_correction() }
 		width:			{ ability_name_height(card.ability_4_name) * 7 / 26 }
 		height:			{ ability_name_height(card.ability_4_name) * 20 / 26 }
 		visible: 		{ card.ability_4_name != "" }
@@ -738,7 +875,7 @@ extra card style:
 extra card style:
 	ability 5 name background edge:
 		left:			{ 23 + ability_name_width(card.ability_5_name) }
-		top:			{ 353 + ability_name_top(card.ability_5_name) + background_top_correction() }
+		top:			{ 353 + ability_name_top(card.ability_5_name) + ability_name_background_top_correction() }
 		width:			{ ability_name_height(card.ability_5_name) * 7 / 26 }
 		height:			{ ability_name_height(card.ability_5_name) * 20 / 26 }
 		visible: 		{ card.ability_5_name != "" }
@@ -749,7 +886,7 @@ extra card style:
 extra card style:
 	ability 6 name background edge:
 		left:			{ 23 + ability_name_width(card.ability_6_name) }
-		top:			{ 353 + ability_name_top(card.ability_6_name) + background_top_correction() }
+		top:			{ 353 + ability_name_top(card.ability_6_name) + ability_name_background_top_correction() }
 		width:			{ ability_name_height(card.ability_6_name) * 7 / 26 }
 		height:			{ ability_name_height(card.ability_6_name) * 20 / 26 }
 		visible: 		{ card.ability_6_name != "" }

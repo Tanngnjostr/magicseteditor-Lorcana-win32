@@ -36,15 +36,15 @@ type_script :=
 {
 	combined_editor(
 		field1: card.type_1,
-		separator1: " • ",
+		separator1: "• ",
 		field2: card.type_2,
-		separator2: " • ",
+		separator2: "• ",
 		field3: card.type_3,
-		separator3: " • ",
+		separator3: "• ",
 		field4: card.type_4,
-		separator4: " • ",
+		separator4: "• ",
 		field5: card.type_5,
-		separator5: " • ",
+		separator5: "• ",
 		field6: card.type_6,
 		soft_before_empty: true,
 		hide_when_empty: true
@@ -126,13 +126,13 @@ ink_sort :=
 }
 
 name_sort :=
-	# Remove "The", "A", and "An" at the beginning
+	### remove "The", "A", and "An" at the beginning
 	replace@(match: "^(The|An?) ", replace: "") +
-	# Remove commas and apostrophes
+	### remove commas and apostrophes
 	replace@(match: "(,|'|’)", replace: "") +
-	# Remove bold and italic tags
+	### remove bold and italic tags
 	replace@(match: "(<b>|<i>|</b>|</i>)", replace: "") +
-	# Make lowercase
+	### make lowercase
 	to_lower
 
 identification_script :=
@@ -209,16 +209,22 @@ this_or_that :=
 }@(upper: false)
 
 symbol_context :=
-	"(?ix)							# case insensitive, ignore whitespace
-	(^|[[:space:]\"(“']|[0-9])		# start of the string, space, quote, parentheses or number
-	<match>							# the actual symbol
-	([ ,.)\"”—-]|$)					# space, comma, dot, quote, dash or end of string
+	"(?ix)							### case insensitive, ignore whitespace
+	(^|[[:space:]\"(“']|[0-9])		### start of the string, space, quote, parentheses or number
+	<match>							### the actual symbol
+	([ ,.)\"”—-]|$)					### space, comma, dot, quote, dash or end of string
 	";
 
 replace_symbols := replace@(match: "([SWELN])", in_context: symbol_context, replace: {"<sym-auto>" + _1 + "</sym-auto>"})
 
 text_filter :=
-	### step 1 : remove all automatic tags
+	### step 1 : remove automatic markers
+	### step 1a : remove leading zero-width space
+	{
+		if input == "" or input.0 != "​" then input		### there is a zero-width space inside the second ""
+		else substring(input, begin: 1)
+	} +
+	### step 1b : remove tags
 	remove_tag@(tag: "<sym-auto>") +
 	remove_tag@(tag: "<i-auto>")   +
 	remove_tag@(tag: "<b-auto>")   +
@@ -261,7 +267,7 @@ text_filter :=
 	### step 3 : expand shortcut word CARDNAME
 	replace@(
 		match: "CARDNAME>?",
-		in_context: "(^|[[:space:]]|\\(|,|\\.|:|“|\"|'|‘|-|—|/|​)<match>", # TODO: Allow any punctuation before
+		in_context: "(^|[[:space:]]|\\(|,|\\.|:|“|\"|'|‘|-|—|/|​)<match>",		### TODO: Allow any punctuation before
 		replace: { "<nospellcheck>" + (if card.name=="" then "CARDNAME" else strip_card_codes(card.name)) + "</nospellcheck>" }
 	) +
 	### step 4 : add symbols
@@ -279,14 +285,14 @@ text_filter :=
 	) +
 	### step 7 : automatic capitalization, but not after "("
 	replace@(
-		match: "([ ]*: |—| — )" # preceded by this
-		     + "([[:lower:]])" # match this
-		     + "(?![)])",      # not followed by this
+		match: "([ ]*: |—| — )"		### preceded by this
+		     + "([[:lower:]])"		### match this
+		     + "(?![)])",			### not followed by this
 		replace: { _1 + to_upper(_2) }
 	) +
 	### step 8 : spellcheck
 	{
-		if set.mark_errors then
+		if set.spell_check then
 		check_spelling(
 			language: "en_US",
 			extra_dictionary: "/lorcana.mse-game/lorcana-words",
@@ -299,7 +305,7 @@ flavor_text_filter :=
 	remove_tag@(tag: "<i-flavor>") +
 	### step 2 : spellcheck
 	{
-		if set.mark_errors then
+		if set.spell_check then
 		check_spelling(
 			language: "en_US",
 			extra_dictionary: "/lorcana.mse-game/lorcana-words",
@@ -308,7 +314,7 @@ flavor_text_filter :=
 	} +
 	### step 3 : surround by italic tags
 	{ "<i-flavor>" + input + "</i-flavor>" }
-	
+
 text_aggregate :=
 {
 	combined_editor(
@@ -330,22 +336,22 @@ text_aggregate :=
 
 last_active_ability :=
 {
-	if		card.ability_1 == ""	then	1
-	else if	card.ability_2 == ""	then	1
-	else if	card.ability_3 == ""	then	2
-	else if	card.ability_4 == ""	then	3
-	else if	card.ability_5 == ""	then	4
-	else if	card.ability_6 == ""	then	5
-	else									6
+	if		card.ability_6 != ""	then	6
+	else if	card.ability_5 != ""	then	5
+	else if	card.ability_4 != ""	then	4
+	else if	card.ability_3 != ""	then	3
+	else if	card.ability_2 != ""	then	2
+	else									1
 }
 
 ability_name :=
 {
-	if card_style.compulse_save.height < 0.1 then value else (		# check if card_style was initialised, if not then just keep the saved value
+	if card_style.compulse_save.height < 0.1 then value else (		### check if card_style was initialised, if not then just keep the saved value
+	if ability_number > last_active_ability() then value else (		### check if the ability is active, if not then just keep the saved value
 	text := block_break(card.text)[ability_number-1]
 	name := trim(filter_ability_name(replace_symbols(remove_tags(text))))
 	if name == "" then ""
-	else "<b-auto>" + name + "</b-auto>" + add_breaks(text, ability_number: ability_number) + add_info(ability_number: ability_number))
+	else "<b-auto>" + name + "</b-auto>" + add_breaks(text, ability_number: ability_number) + add_info(ability_number: ability_number)))
 }
 
 filter_ability_name := filter_text@(match: "(^[\"“‘']?[A-Z0-9][A-Z0-9 \"“‘'()-]+[ ])")
