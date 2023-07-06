@@ -38,7 +38,11 @@ init script:
 	text_top := 350
 	text_width := 338
 	text_bottom := 480
+	
 	lore_box_width := 31
+	
+	line_spacing := 1.1
+	ability_spacing := 0.75
 	
 	flavor_bar_top :=
 	{
@@ -353,8 +357,8 @@ card style:
 		padding left:			6
 		padding right:			5
 		line height hard:		1.0
-		line height line:		1.1
-		line height soft:		0.75
+		line height line:		{ ability_spacing }
+		line height soft:		{ line_spacing }
 		line height hard max:	1.3
 		line height line max:	1.6
 
@@ -386,8 +390,8 @@ card style:
 		padding left:			6
 		padding right:			5
 		line height hard:		1.0
-		line height line:		1.1
-		line height soft:		0.75
+		line height line:		{ ability_spacing }
+		line height soft:		{ line_spacing }
 		line height hard max:	1.3
 		line height line max:	1.6
 
@@ -412,8 +416,8 @@ card style:
 		padding left:			6
 		padding right:			5
 		line height hard:		1.0
-		line height line:		1.1
-		line height soft:		0.75
+		line height line:		{ ability_spacing }
+		line height soft:		{ line_spacing }
 		line height hard max:	1.3
 		line height line max:	1.6
 
@@ -438,8 +442,8 @@ card style:
 		padding left:			6
 		padding right:			5
 		line height hard:		1.0
-		line height line:		1.1
-		line height soft:		0.75
+		line height line:		{ ability_spacing }
+		line height soft:		{ line_spacing }
 		line height hard max:	1.3
 		line height line max:	1.6
 
@@ -464,8 +468,8 @@ card style:
 		padding left:			6
 		padding right:			5
 		line height hard:		1.0
-		line height line:		1.1
-		line height soft:		0.75
+		line height line:		{ ability_spacing }
+		line height soft:		{ line_spacing }
 		line height hard max:	1.3
 		line height line max:	1.6
 
@@ -490,8 +494,8 @@ card style:
 		padding left:			6
 		padding right:			5
 		line height hard:		1.0
-		line height line:		1.1
-		line height soft:		0.75
+		line height line:		{ ability_spacing }
+		line height soft:		{ line_spacing }
 		line height hard max:	1.3
 		line height line max:	1.6
 
@@ -516,8 +520,8 @@ card style:
 		padding left:			6
 		padding right:			5
 		line height hard:		1.0
-		line height line:		1.1
-		line height soft:		0.75
+		line height line:		{ ability_spacing }
+		line height soft:		{ line_spacing }
 		line height hard max:	1.3
 		line height line max:	1.6
 
