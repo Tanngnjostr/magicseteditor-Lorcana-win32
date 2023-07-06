@@ -44,6 +44,10 @@ init script:
 	line_spacing := 1.1
 	ability_spacing := 0.75
 	
+	flavor_bar_height := 7.0
+	
+	
+	
 	flavor_bar_top :=
 	{
 		last_ability := last_active_ability()
@@ -65,10 +69,10 @@ init script:
 			else													"flavor_bar_diamond.png"
 		)
 	}
-	flavor_bar_height :=
+	flavor_bar_effective_height :=
 	{
 		line_height := card_style.text.layout.blocks.0.lines.0.height
-		line_height * 7.0 / 26.0
+		line_height * flavor_bar_height / 26.0
 	}
 	flavor_bar_visible :=
 	{
@@ -766,7 +770,7 @@ extra card style:
 		left:			29
 		top:			{ flavor_bar_top() }
 		width:			287
-		height:			{ flavor_bar_height() }
+		height:			{ flavor_bar_effective_height() }
 		z index:		3
 		visible:		{ flavor_bar_visible() }
 		render style:	image
