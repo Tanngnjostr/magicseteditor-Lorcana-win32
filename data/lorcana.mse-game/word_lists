@@ -1,9 +1,36 @@
 ﻿
 word list:
-	name: type
-	word: Song
+	name: first_type
+	word:
+		script: all_firsttypes()
+		line below: true
+	word: Storyborn
+	word: Dreamborn
+	word: Floodborn
 	word: Action
 	word: Item
+	
+word list:
+	name: character_type
+	#This isn't a confusing name at all for programmers...
+	word:
+		script: all_chartypes()
+		line below: true
 	word: Hero
-	word: Dreamborn
-	word: Storyborn
+	word: Villain
+	word: Ally
+	word: Prince
+	word: Princess
+	
+word list:
+	name: action
+	word:
+		script: all_actions()
+		line below: true
+	word:Song
+
+word list:
+	name: item
+	word:
+		script: all_items()
+		line below: true

@@ -100,7 +100,7 @@ card field:
 card field:
 	type: text
 	name: type 1
-	script: type_filter(input: value)
+	script: type_1_filter(input: value)
 	card list visible: false
 	card list name: Type 1
 	card list column: 61
@@ -109,7 +109,7 @@ card field:
 card field:
 	type: text
 	name: type 2
-	script: type_filter(input: value)
+	script: sub_type_filter(input: value)
 	card list visible: false
 	card list name: Type 2
 	card list column: 62
@@ -118,7 +118,7 @@ card field:
 card field:
 	type: text
 	name: type 3
-	script: type_filter(input: value)
+	script: sub_type_filter(input: value)
 	card list visible: false
 	card list name: Type 3
 	card list column: 63
@@ -127,7 +127,7 @@ card field:
 card field:
 	type: text
 	name: type 4
-	script: type_filter(input: value)
+	script: sub_type_filter(input: value)
 	card list visible: false
 	card list name: Type 4
 	card list column: 64
@@ -136,7 +136,7 @@ card field:
 card field:
 	type: text
 	name: type 5
-	script: type_filter(input: value)
+	script: sub_type_filter(input: value)
 	card list visible: false
 	card list name: Type 5
 	card list column: 65
@@ -145,7 +145,7 @@ card field:
 card field:
 	type: text
 	name: type 6
-	script: type_filter(input: value)
+	script: sub_type_filter(input: value)
 	card list visible: false
 	card list name: Type 6
 	card list column: 66

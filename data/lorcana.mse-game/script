@@ -32,12 +32,6 @@ full_name_script :=
 	)
 }
 
-type_filter :=
-{
-	input := remove_tag(input, tag: "<word-list-")
-	"<word-list-type>" + input + "</word-list-type>"
-}
-
 type_script :=
 {
 	combined_editor(
@@ -388,29 +382,56 @@ ability_name_height := filter_text@(match: "[0-9]+", in_context: "<height=<match
 
 all_firsttypes := {
 	for each card in set do
-		card.type_1
+		if card.type_1 != ""
+		then "," + remove_tags(card.type_1)
 }
 
-all_actions := {
-	for each card in set do
-		if card.type_1 == "Action" then
-			card.type_2
-			#TODO: make this work for all types
-		else ""
+all_actions := 
+{
+    for each card in set do
+        if contains(card.type_1, match: "Action")
+        then "," + remove_tags(card.type_2) + "," + remove_tags(card.type_3) + "," + remove_tags(card.type_4) + "," + remove_tags(card.type_5) + "," + remove_tags(card.type_6)
+        else ""
 }
 
-all_items := {
-	for each card in set do
-		if card.type_1 == "Item" then
-			card.type_2
-			#TODO: make this work for all types
-		else ""
+all_items := 
+{
+    for each card in set do
+        if contains(card.type_1, match: "Item")
+        then "," + remove_tags(card.type_2) + "," + remove_tags(card.type_3) + "," + remove_tags(card.type_4) + "," + remove_tags(card.type_5) + "," + remove_tags(card.type_6)
+        else ""
 }
 
-all_chartypes := {
-	for each card in set do
-		if (card.type_1 == "Floodborn" or char.type_1 = "Dreamborn" or char.type_1 = "Floodborn" ) then
-			card.type_2
-			#TODO: make this work for all types
-		else ""
+all_chartypes :=
+{
+    for each card in set do
+        if contains(card.type_1, match: "born") then 
+        "," + remove_tags(card.type_2) + "," + remove_tags(card.type_3) + "," + remove_tags(card.type_4) + "," + remove_tags(card.type_5) + "," + remove_tags(card.type_6)
+        else ""
+}
+
+type_1_filter :=
+{
+    ### remove all word lists
+    input := remove_tag(input, tag: "<word-list-")
+    ### add generic word list that has all the types
+    "<word-list-first_type>" + input + "</word-list-first_type>"
+}
+
+sub_type_filter :=
+{
+    ### remove all word lists
+    input := remove_tag(input, tag: "<word-list-")
+    ### check if character, add character word list
+    if contains(card.type_1, match: "born") then 
+	"<word-list-character_type>" + input + "</word-list-character_type>"
+    ### check if action, add action word list
+    else if contains(card.type_1, match:"Action") then 
+	"<word-list-action>" + input + "</word-list-action>"
+	##check if item, add item word list
+	else if contains(card.type_1, match:"Item") then 
+	"<word-list-item>" + input + "</word-list-item>"
+    ### if all else fails, don't give a word list
+    else 
+	input
 }
