@@ -23,14 +23,14 @@ word list:
 	word: Princess
 	
 word list:
-	name: action
+	name: action_type
 	word:
 		script: all_actions()
 		line below: true
 	word:Song
 
 word list:
-	name: item
+	name: item_type
 	word:
 		script: all_items()
 		line below: true
