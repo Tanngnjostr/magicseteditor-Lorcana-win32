@@ -368,8 +368,8 @@ add_breaks :=
 
 add_info :=
 {
-	top := round(card_style.text.layout.blocks[ability_number-1].lines.0.top - 2)
-	height := round(card_style.text.layout.blocks[ability_number-1].lines.0.height + 3)
+	top := round(card_style.text.layout.blocks[ability_number-1].lines.0.top - 1)
+	height := round(card_style.text.layout.blocks[ability_number-1].lines.0.height + 2)
 	width := round(card_style["ability_" + ability_number + "_name"].content_width + 1)
 	"<top=" + top + "></top=" + top + "><height=" + height + "></height=" + height + "><width=" + width + "></width=" + width + ">"
 }
