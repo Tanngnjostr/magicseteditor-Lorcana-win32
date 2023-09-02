@@ -1,6 +1,11 @@
 # magicseteditor-Lorcana-win32
 
 Instructions:
+
+To obtain the .zip file:
+1. Click on the green button labeled "Code".
+2. Click "Download ZIP".
+
 If you do not have another MSE installation:
 1. Unzip the folder.
 2. Go into the folder named "Fonts - INSTALL ALL OF THESE".
