@@ -38,7 +38,15 @@ init script:
 	text_top := 350
 	text_width := 338
 	text_bottom := 480
+	
 	lore_box_width := 31
+	
+	line_spacing := 1.1
+	ability_spacing := 0.75
+	
+	flavor_bar_height := 7.0
+	
+	
 	
 	flavor_bar_top :=
 	{
@@ -61,10 +69,10 @@ init script:
 			else													"flavor_bar_diamond.png"
 		)
 	}
-	flavor_bar_height :=
+	flavor_bar_effective_height :=
 	{
 		line_height := card_style.text.layout.blocks.0.lines.0.height
-		line_height * 7.0 / 26.0
+		line_height * flavor_bar_height / 26.0
 	}
 	flavor_bar_visible :=
 	{
@@ -353,8 +361,8 @@ card style:
 		padding left:			6
 		padding right:			5
 		line height hard:		1.0
-		line height line:		1.1
-		line height soft:		0.75
+		line height line:		{ ability_spacing }
+		line height soft:		{ line_spacing }
 		line height hard max:	1.3
 		line height line max:	1.6
 
@@ -386,8 +394,8 @@ card style:
 		padding left:			6
 		padding right:			5
 		line height hard:		1.0
-		line height line:		1.1
-		line height soft:		0.75
+		line height line:		{ ability_spacing }
+		line height soft:		{ line_spacing }
 		line height hard max:	1.3
 		line height line max:	1.6
 
@@ -412,8 +420,8 @@ card style:
 		padding left:			6
 		padding right:			5
 		line height hard:		1.0
-		line height line:		1.1
-		line height soft:		0.75
+		line height line:		{ ability_spacing }
+		line height soft:		{ line_spacing }
 		line height hard max:	1.3
 		line height line max:	1.6
 
@@ -438,8 +446,8 @@ card style:
 		padding left:			6
 		padding right:			5
 		line height hard:		1.0
-		line height line:		1.1
-		line height soft:		0.75
+		line height line:		{ ability_spacing }
+		line height soft:		{ line_spacing }
 		line height hard max:	1.3
 		line height line max:	1.6
 
@@ -464,8 +472,8 @@ card style:
 		padding left:			6
 		padding right:			5
 		line height hard:		1.0
-		line height line:		1.1
-		line height soft:		0.75
+		line height line:		{ ability_spacing }
+		line height soft:		{ line_spacing }
 		line height hard max:	1.3
 		line height line max:	1.6
 
@@ -490,8 +498,8 @@ card style:
 		padding left:			6
 		padding right:			5
 		line height hard:		1.0
-		line height line:		1.1
-		line height soft:		0.75
+		line height line:		{ ability_spacing }
+		line height soft:		{ line_spacing }
 		line height hard max:	1.3
 		line height line max:	1.6
 
@@ -516,8 +524,8 @@ card style:
 		padding left:			6
 		padding right:			5
 		line height hard:		1.0
-		line height line:		1.1
-		line height soft:		0.75
+		line height line:		{ ability_spacing }
+		line height soft:		{ line_spacing }
 		line height hard max:	1.3
 		line height line max:	1.6
 
@@ -762,7 +770,7 @@ extra card style:
 		left:			29
 		top:			{ flavor_bar_top() }
 		width:			287
-		height:			{ flavor_bar_height() }
+		height:			{ flavor_bar_effective_height() }
 		z index:		3
 		visible:		{ flavor_bar_visible() }
 		render style:	image
