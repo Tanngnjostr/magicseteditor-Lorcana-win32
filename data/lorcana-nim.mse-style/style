@@ -41,8 +41,8 @@ init script:
 	
 	lore_box_width := 31
 	
-	line_spacing := 1.1
-	ability_spacing := 0.75
+	line_spacing := 0.85
+	ability_spacing := 1.1
 	
 	flavor_bar_height := 7.0
 	

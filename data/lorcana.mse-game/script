@@ -280,7 +280,7 @@ text_filter :=
 	) +
 	### step 6 : bolden all caps text at start of string, make it white
 	replace@(
-	 	match: "(^[\"“‘']?[A-Z0-9][A-Z0-9 \"“‘'()-]+)([ ]+)",
+	 	match: "(^[\"“‘'’]?[A-Z0-9][A-Z0-9 \"“‘'’,()-]+)([ ]+)",
 		replace: {"<color:rgb(255,255,255)><b-auto>" + _1 + "</b-auto></color:rgb(255,255,255)>" + _2}
 	) +
 	### step 7 : automatic capitalization, but not after "("
@@ -354,7 +354,7 @@ ability_name :=
 	else "<b-auto>" + name + "</b-auto>" + add_breaks(text, ability_number: ability_number) + add_info(ability_number: ability_number)))
 }
 
-filter_ability_name := filter_text@(match: "(^[\"“‘']?[A-Z0-9][A-Z0-9 \"“‘'()-]+[ ])")
+filter_ability_name := filter_text@(match: "(^[\"“‘'’]?[A-Z0-9][A-Z0-9 \"“‘'’,()-]+[ ])")
 
 block_break := split_text@(match: "<sep><line>\n</line></sep>")
 
@@ -368,9 +368,9 @@ add_breaks :=
 
 add_info :=
 {
-	top := round(card_style.text.layout.blocks[ability_number-1].lines.0.top)
-	height := round(card_style.text.layout.blocks[ability_number-1].lines.0.height)
-	width := round(card_style["ability_" + ability_number + "_name"].content_width)
+	top := round(card_style.text.layout.blocks[ability_number-1].lines.0.top - 2)
+	height := round(card_style.text.layout.blocks[ability_number-1].lines.0.height + 3)
+	width := round(card_style["ability_" + ability_number + "_name"].content_width + 1)
 	"<top=" + top + "></top=" + top + "><height=" + height + "></height=" + height + "><width=" + width + "></width=" + width + ">"
 }
 
