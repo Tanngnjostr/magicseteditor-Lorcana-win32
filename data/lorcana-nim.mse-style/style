@@ -570,7 +570,7 @@ card style:
 	illustrator:
 		left:			38
 		top:			491
-		width:			200
+		right:			170
 		height:			10
 		z index:		21
 		alignment:		left middle
@@ -580,10 +580,20 @@ card style:
 			color:				white
 
 card style:
+	rarity:
+		left:177
+		top: 486
+		width: 23
+		height: 24
+		z index: 22
+		render style: image
+		image: {"rarity/"  + card.rarity + ".png"}
+
+card style:
 	identification:
 		left:			{ 17 + card_style.custom_identification.content_width }
 		top:			504
-		width:			190
+		right:			170
 		height:			10
 		z index:		21
 		alignment:		left middle
@@ -596,7 +606,7 @@ card style:
 	custom identification:
 		left:			17
 		top:			504
-		width:			190
+		right:			170
 		height:			10
 		z index:		21
 		alignment:		left middle
@@ -609,7 +619,7 @@ card style:
 	copyright:
 		right:			{ 358 - card_style.custom_copyright.content_width }
 		top:			504
-		width:			150
+		left:			205
 		height:			10
 		z index:		21
 		alignment:		right middle
@@ -622,7 +632,7 @@ card style:
 	custom copyright:
 		right:			358
 		top:			504
-		width:			150
+		left:			205
 		height:			10
 		z index:		21
 		alignment:		right middle
