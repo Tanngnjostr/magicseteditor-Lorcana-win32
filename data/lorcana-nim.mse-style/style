@@ -184,9 +184,9 @@ init script:
 		else to_int(styling.number_of_abilities)
 	}
 	
-	increase_ability_top :=		{ clamp((to_int(parse_comma_array(styling["adjust_ability_" + input + "_background"], cell:0, end:0, default:0)) or else 0), minimum: -500, maximum: 500) }
-	increase_ability_bottom :=	{ clamp((to_int(parse_comma_array(styling["adjust_ability_" + input + "_background"], cell:1, end:0, default:0)) or else 0), minimum: -500, maximum: 500) }
-	increase_ability_right :=	{ clamp((to_int(parse_comma_array(styling["adjust_ability_" + input + "_background"], cell:2, end:0, default:0)) or else 0), minimum: -500, maximum: 500) }
+	increase_ability_top :=		{ clamp((to_int(parse_comma_array(styling["adjust_ability_" + input + "_stripe"], cell:0, end:0, default:0)) or else 0), minimum: -500, maximum: 500) }
+	increase_ability_bottom :=	{ clamp((to_int(parse_comma_array(styling["adjust_ability_" + input + "_stripe"], cell:1, end:0, default:0)) or else 0), minimum: -500, maximum: 500) }
+	increase_ability_right :=	{ clamp((to_int(parse_comma_array(styling["adjust_ability_" + input + "_stripe"], cell:2, end:0, default:0)) or else 0), minimum: -500, maximum: 500) }
 
 
 ####################### Styling Field Definitions
@@ -205,28 +205,28 @@ styling field:
 	description: The number of text fields for abilities and passives. Use the up and down arrow keys to navigate between ability fields.
 styling field:
 	type: text
-	name: adjust ability 1 background
-	description: Adjusts the top, bottom, and right edges of the background for the ability 1 name by this many pixels. Formatted as "top,bottom,right".
+	name: adjust ability 1 stripe
+	description: Adjusts the top, bottom, and right edges of the background stripe for the ability 1 name by this many pixels. Formatted as "top,bottom,right".
 styling field:
 	type: text
-	name: adjust ability 2 background
-	description: Adjusts the top, bottom, and right edges of the background for the ability 2 name by this many pixels. Formatted as "top,bottom,right".
+	name: adjust ability 2 stripe
+	description: Adjusts the top, bottom, and right edges of the background stripe for the ability 2 name by this many pixels. Formatted as "top,bottom,right".
 styling field:
 	type: text
-	name: adjust ability 3 background
-	description: Adjusts the top, bottom, and right edges of the background for the ability 3 name by this many pixels. Formatted as "top,bottom,right".
+	name: adjust ability 3 stripe
+	description: Adjusts the top, bottom, and right edges of the background stripe for the ability 3 name by this many pixels. Formatted as "top,bottom,right".
 styling field:
 	type: text
-	name: adjust ability 4 background
-	description: Adjusts the top, bottom, and right edges of the background for the ability 4 name by this many pixels. Formatted as "top,bottom,right".
+	name: adjust ability 4 stripe
+	description: Adjusts the top, bottom, and right edges of the background stripe for the ability 4 name by this many pixels. Formatted as "top,bottom,right".
 styling field:
 	type: text
-	name: adjust ability 5 background
-	description: Adjusts the top, bottom, and right edges of the background for the ability 5 name by this many pixels. Formatted as "top,bottom,right".
+	name: adjust ability 5 stripe
+	description: Adjusts the top, bottom, and right edges of the background stripe for the ability 5 name by this many pixels. Formatted as "top,bottom,right".
 styling field:
 	type: text
-	name: adjust ability 6 background
-	description: Adjusts the top, bottom, and right edges of the background for the ability 6 name by this many pixels. Formatted as "top,bottom,right".
+	name: adjust ability 6 stripe
+	description: Adjusts the top, bottom, and right edges of the background stripe for the ability 6 name by this many pixels. Formatted as "top,bottom,right".
 styling field:
 	type: choice
 	name: flavor bar
