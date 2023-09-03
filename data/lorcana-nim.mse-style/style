@@ -183,7 +183,10 @@ init script:
 		)
 		else to_int(styling.number_of_abilities)
 	}
-
+	
+	increase_ability_top :=		{ clamp((to_int(parse_comma_array(styling["adjust_ability_" + input + "_background"], cell:0, end:0, default:0)) or else 0), minimum: -500, maximum: 500) }
+	increase_ability_bottom :=	{ clamp((to_int(parse_comma_array(styling["adjust_ability_" + input + "_background"], cell:1, end:0, default:0)) or else 0), minimum: -500, maximum: 500) }
+	increase_ability_right :=	{ clamp((to_int(parse_comma_array(styling["adjust_ability_" + input + "_background"], cell:2, end:0, default:0)) or else 0), minimum: -500, maximum: 500) }
 
 
 ####################### Styling Field Definitions
@@ -200,6 +203,30 @@ styling field:
 	choice: 6
 	initial: automatic
 	description: The number of text fields for abilities and passives. Use the up and down arrow keys to navigate between ability fields.
+styling field:
+	type: text
+	name: adjust ability 1 background
+	description: Adjusts the top, bottom, and right edges of the background for the ability 1 name by this many pixels. Formatted as "top,bottom,right".
+styling field:
+	type: text
+	name: adjust ability 2 background
+	description: Adjusts the top, bottom, and right edges of the background for the ability 2 name by this many pixels. Formatted as "top,bottom,right".
+styling field:
+	type: text
+	name: adjust ability 3 background
+	description: Adjusts the top, bottom, and right edges of the background for the ability 3 name by this many pixels. Formatted as "top,bottom,right".
+styling field:
+	type: text
+	name: adjust ability 4 background
+	description: Adjusts the top, bottom, and right edges of the background for the ability 4 name by this many pixels. Formatted as "top,bottom,right".
+styling field:
+	type: text
+	name: adjust ability 5 background
+	description: Adjusts the top, bottom, and right edges of the background for the ability 5 name by this many pixels. Formatted as "top,bottom,right".
+styling field:
+	type: text
+	name: adjust ability 6 background
+	description: Adjusts the top, bottom, and right edges of the background for the ability 6 name by this many pixels. Formatted as "top,bottom,right".
 styling field:
 	type: choice
 	name: flavor bar
@@ -789,9 +816,9 @@ extra card style:
 extra card style:
 	ability 1 name background:
 		left:			18
-		top:			{ text_top + 3 + ability_name_top(card.ability_1_name) + ability_name_background_top_correction() }
-		right:			{ text_left + 5 + ability_name_width(card.ability_1_name) }
-		height:			{ ability_name_height(card.ability_1_name) * 20 / 26 }
+		top:			{ text_top + 3 + ability_name_top(card.ability_1_name) + ability_name_background_top_correction() - increase_ability_top(1) }
+		right:			{ text_left + 5 + ability_name_width(card.ability_1_name) + increase_ability_right(1) }
+		height:			{ ability_name_height(card.ability_1_name) * 20 / 26 + increase_ability_top(1) + increase_ability_bottom(1) }
 		visible: 		{ card.ability_1_name != "" }
 		z index:		3
 		render style:	image
@@ -801,9 +828,9 @@ extra card style:
 extra card style:
 	ability 2 name background:
 		left:			18
-		top:			{ text_top + 3 + ability_name_top(card.ability_2_name) + ability_name_background_top_correction() }
-		right:			{ text_left + 5 + ability_name_width(card.ability_2_name) }
-		height:			{ ability_name_height(card.ability_2_name) * 20 / 26 }
+		top:			{ text_top + 3 + ability_name_top(card.ability_2_name) + ability_name_background_top_correction() - increase_ability_top(2) }
+		right:			{ text_left + 5 + ability_name_width(card.ability_2_name) + increase_ability_right(2) }
+		height:			{ ability_name_height(card.ability_2_name) * 20 / 26 + increase_ability_top(2) + increase_ability_bottom(2) }
 		visible: 		{ card.ability_2_name != "" }
 		z index:		3
 		render style:	image
@@ -812,9 +839,9 @@ extra card style:
 extra card style:
 	ability 3 name background:
 		left:			18
-		top:			{ text_top + 3 + ability_name_top(card.ability_3_name) + ability_name_background_top_correction() }
-		right:			{ text_left + 5 + ability_name_width(card.ability_3_name) }
-		height:			{ ability_name_height(card.ability_3_name) * 20 / 26 }
+		top:			{ text_top + 3 + ability_name_top(card.ability_3_name) + ability_name_background_top_correction() - increase_ability_top(3) }
+		right:			{ text_left + 5 + ability_name_width(card.ability_3_name) + increase_ability_right(3) }
+		height:			{ ability_name_height(card.ability_3_name) * 20 / 26 + increase_ability_top(3) + increase_ability_bottom(3) }
 		visible: 		{ card.ability_3_name != "" }
 		z index:		3
 		render style:	image
@@ -823,9 +850,9 @@ extra card style:
 extra card style:
 	ability 4 name background:
 		left:			18
-		top:			{ text_top + 3 + ability_name_top(card.ability_4_name) + ability_name_background_top_correction() }
-		right:			{ text_left + 5 + ability_name_width(card.ability_4_name) }
-		height:			{ ability_name_height(card.ability_4_name) * 20 / 26 }
+		top:			{ text_top + 3 + ability_name_top(card.ability_4_name) + ability_name_background_top_correction() - increase_ability_top(4) }
+		right:			{ text_left + 5 + ability_name_width(card.ability_4_name) + increase_ability_right(4) }
+		height:			{ ability_name_height(card.ability_4_name) * 20 / 26 + increase_ability_top(4) + increase_ability_bottom(4) }
 		visible: 		{ card.ability_4_name != "" }
 		z index:		3
 		render style:	image
@@ -834,9 +861,9 @@ extra card style:
 extra card style:
 	ability 5 name background:
 		left:			18
-		top:			{ text_top + 3 + ability_name_top(card.ability_5_name) + ability_name_background_top_correction() }
-		right:			{ text_left + 5 + ability_name_width(card.ability_5_name) }
-		height:			{ ability_name_height(card.ability_5_name) * 20 / 26 }
+		top:			{ text_top + 3 + ability_name_top(card.ability_5_name) + ability_name_background_top_correction() - increase_ability_top(5) }
+		right:			{ text_left + 5 + ability_name_width(card.ability_5_name) + increase_ability_right(5) }
+		height:			{ ability_name_height(card.ability_5_name) * 20 / 26 + increase_ability_top(5) + increase_ability_bottom(5) }
 		visible: 		{ card.ability_5_name != "" }
 		z index:		3
 		render style:	image
@@ -845,9 +872,9 @@ extra card style:
 extra card style:
 	ability 6 name background:
 		left:			18
-		top:			{ text_top + 3 + ability_name_top(card.ability_6_name) + ability_name_background_top_correction() }
-		right:			{ text_left + 5 + ability_name_width(card.ability_6_name) }
-		height:			{ ability_name_height(card.ability_6_name) * 20 / 26 }
+		top:			{ text_top + 3 + ability_name_top(card.ability_6_name) + ability_name_background_top_correction() - increase_ability_top(6) }
+		right:			{ text_left + 5 + ability_name_width(card.ability_6_name) + increase_ability_right(6) }
+		height:			{ ability_name_height(card.ability_6_name) * 20 / 26 + increase_ability_top(6) + increase_ability_bottom(6) }
 		visible: 		{ card.ability_6_name != "" }
 		z index:		3
 		render style:	image
@@ -855,10 +882,10 @@ extra card style:
 		
 extra card style:
 	ability 1 name background edge:
-		left:			{ text_left + 5 + ability_name_width(card.ability_1_name) }
-		top:			{ text_top + 3 + ability_name_top(card.ability_1_name) + ability_name_background_top_correction() }
+		left:			{ text_left + 5 + ability_name_width(card.ability_1_name) + increase_ability_right(1) }
+		top:			{ text_top + 3 + ability_name_top(card.ability_1_name) + ability_name_background_top_correction() - increase_ability_top(1) }
 		width:			{ ability_name_height(card.ability_1_name) * 7 / 26 }
-		height:			{ ability_name_height(card.ability_1_name) * 20 / 26 }
+		height:			{ ability_name_height(card.ability_1_name) * 20 / 26 + increase_ability_top(1) + increase_ability_bottom(1) }
 		visible: 		{ card.ability_1_name != "" }
 		z index:		3
 		render style:	image
@@ -866,10 +893,10 @@ extra card style:
 
 extra card style:
 	ability 2 name background edge:
-		left:			{ text_left + 5 + ability_name_width(card.ability_2_name) }
-		top:			{ text_top + 3 + ability_name_top(card.ability_2_name) + ability_name_background_top_correction() }
+		left:			{ text_left + 5 + ability_name_width(card.ability_2_name) + increase_ability_right(2) }
+		top:			{ text_top + 3 + ability_name_top(card.ability_2_name) + ability_name_background_top_correction() - increase_ability_top(2) }
 		width:			{ ability_name_height(card.ability_2_name) * 7 / 26 }
-		height:			{ ability_name_height(card.ability_2_name) * 20 / 26 }
+		height:			{ ability_name_height(card.ability_2_name) * 20 / 26 + increase_ability_top(2) + increase_ability_bottom(2) }
 		visible: 		{ card.ability_2_name != "" }
 		z index:		3
 		render style:	image
@@ -877,10 +904,10 @@ extra card style:
 
 extra card style:
 	ability 3 name background edge:
-		left:			{ text_left + 5 + ability_name_width(card.ability_3_name) }
-		top:			{ text_top + 3 + ability_name_top(card.ability_3_name) + ability_name_background_top_correction() }
+		left:			{ text_left + 5 + ability_name_width(card.ability_3_name) + increase_ability_right(3) }
+		top:			{ text_top + 3 + ability_name_top(card.ability_3_name) + ability_name_background_top_correction() - increase_ability_top(3) }
 		width:			{ ability_name_height(card.ability_3_name) * 7 / 26 }
-		height:			{ ability_name_height(card.ability_3_name) * 20 / 26 }
+		height:			{ ability_name_height(card.ability_3_name) * 20 / 26 + increase_ability_top(3) + increase_ability_bottom(3) }
 		visible: 		{ card.ability_3_name != "" }
 		z index:		3
 		render style:	image
@@ -888,10 +915,10 @@ extra card style:
 
 extra card style:
 	ability 4 name background edge:
-		left:			{ text_left + 5 + ability_name_width(card.ability_4_name) }
-		top:			{ text_top + 3 + ability_name_top(card.ability_4_name) + ability_name_background_top_correction() }
+		left:			{ text_left + 5 + ability_name_width(card.ability_4_name) + increase_ability_right(4) }
+		top:			{ text_top + 3 + ability_name_top(card.ability_4_name) + ability_name_background_top_correction() - increase_ability_top(4) }
 		width:			{ ability_name_height(card.ability_4_name) * 7 / 26 }
-		height:			{ ability_name_height(card.ability_4_name) * 20 / 26 }
+		height:			{ ability_name_height(card.ability_4_name) * 20 / 26 + increase_ability_top(4) + increase_ability_bottom(4) }
 		visible: 		{ card.ability_4_name != "" }
 		z index:		3
 		render style:	image
@@ -899,10 +926,10 @@ extra card style:
 
 extra card style:
 	ability 5 name background edge:
-		left:			{ text_left + 5 + ability_name_width(card.ability_5_name) }
-		top:			{ text_top + 3 + ability_name_top(card.ability_5_name) + ability_name_background_top_correction() }
+		left:			{ text_left + 5 + ability_name_width(card.ability_5_name) + increase_ability_right(5) }
+		top:			{ text_top + 3 + ability_name_top(card.ability_5_name) + ability_name_background_top_correction() - increase_ability_top(5) }
 		width:			{ ability_name_height(card.ability_5_name) * 7 / 26 }
-		height:			{ ability_name_height(card.ability_5_name) * 20 / 26 }
+		height:			{ ability_name_height(card.ability_5_name) * 20 / 26 + increase_ability_top(5) + increase_ability_bottom(5) }
 		visible: 		{ card.ability_5_name != "" }
 		z index:		3
 		render style:	image
@@ -910,10 +937,10 @@ extra card style:
 
 extra card style:
 	ability 6 name background edge:
-		left:			{ text_left + 5 + ability_name_width(card.ability_6_name) }
-		top:			{ text_top + 3 + ability_name_top(card.ability_6_name) + ability_name_background_top_correction() }
+		left:			{ text_left + 5 + ability_name_width(card.ability_6_name) + increase_ability_right(6) }
+		top:			{ text_top + 3 + ability_name_top(card.ability_6_name) + ability_name_background_top_correction() - increase_ability_top(6) }
 		width:			{ ability_name_height(card.ability_6_name) * 7 / 26 }
-		height:			{ ability_name_height(card.ability_6_name) * 20 / 26 }
+		height:			{ ability_name_height(card.ability_6_name) * 20 / 26 + increase_ability_top(6) + increase_ability_bottom(6) }
 		visible: 		{ card.ability_6_name != "" }
 		z index:		3
 		render style:	image

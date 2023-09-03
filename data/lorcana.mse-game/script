@@ -1,6 +1,21 @@
 ﻿
 split_commas := split_text@(match:" *, *")
 
+comma_count := filter_text@(match:",") + length
+
+parse_comma_array :=
+{
+	array := split_text(input, match: divider)
+	length := comma_count(input)
+	ending := to_number(end)
+	if		(cell >= (length + (1-ending)))
+		or	array[cell] == nil
+		or	array[cell] == ""
+		or	array[cell] == "-"
+	then default
+	else array[cell]
+}@(default:0, end: 1, divider:",", cell:0)
+
 round :=
 {
 	if		input == 0
@@ -19,6 +34,13 @@ round :=
 		dec := input-int
 		if dec <= -0.5 then int-1 else int
 	)
+}
+
+clamp :=
+{
+	if input < minimum then minimum
+	else if input > maximum then maximum
+	else input
 }
 
 full_name_script :=
