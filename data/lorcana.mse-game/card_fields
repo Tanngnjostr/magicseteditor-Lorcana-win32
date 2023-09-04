@@ -415,6 +415,7 @@ card field:
 	choice: rare
 	choice: super rare
 	choice: legendary
+	choice: enchanted
 	initial: common
 	sort script: rarity_sort()
 	card list visible: true
